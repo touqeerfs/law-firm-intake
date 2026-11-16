@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Figtree, JetBrains_Mono } from 'next/font/google';
 import { AppShell } from '@/components/layout/app-shell';
 import { Providers } from '@/components/layout/providers';
 import { cx } from '@/lib/cx';
+import { themeScript } from '@/lib/theme';
 import './globals.css';
 
 const bricolage = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-bricolage' });
@@ -20,7 +21,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={cx(bricolage.variable, figtree.variable, jetbrainsMono.variable)}>
+    <html
+      lang="en"
+      className={cx(bricolage.variable, figtree.variable, jetbrainsMono.variable)}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <Providers>
           <AppShell>{children}</AppShell>
