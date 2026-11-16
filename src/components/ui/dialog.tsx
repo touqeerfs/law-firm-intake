@@ -25,7 +25,7 @@ export function Dialog({ title, description, onClose, children }: DialogProps) {
   return (
     <RadixDialog.Root open onOpenChange={(open) => !open && onClose()}>
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-text/30 backdrop-blur-xs" />
+        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-xs" />
         <RadixDialog.Content
           onCloseAutoFocus={returnFocus}
           className="fixed inset-x-0 bottom-0 z-50 max-h-dvh overflow-y-auto rounded-t-xl border border-border bg-surface pb-safe shadow-lg desktop:top-1/2 desktop:right-auto desktop:bottom-auto desktop:left-1/2 desktop:w-140 desktop:-translate-1/2 desktop:rounded-xl desktop:pb-0"
