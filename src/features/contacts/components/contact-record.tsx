@@ -74,8 +74,8 @@ function RecordContent({ id, onDraftChange }: ContactRecordProps) {
       <ContactHeader contact={contact} />
       <StatusStepper contact={contact} onMove={(to) => requestMove(contact, to)} />
       <ContactBanners contact={contact} />
-      <div className="flex flex-col gap-4.5 @4xl:flex-row @4xl:items-start">
-        <div className="flex flex-col gap-3.5 @4xl:w-95 @4xl:shrink-0">
+      <div className="flex flex-col gap-4.5 @two-column:flex-row @two-column:items-start">
+        <div className="flex flex-col gap-3.5 @two-column:w-95 @two-column:shrink-0">
           <MatterCard contact={contact} />
           <ContactDetailsCard contact={contact} />
         </div>

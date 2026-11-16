@@ -16,8 +16,8 @@ export function ContactRecordSkeleton() {
       </div>
       <div className="mb-4.5 h-10.5 animate-pulse rounded-md bg-surface-3" />
 
-      <div className="flex flex-col gap-4.5 @4xl:flex-row @4xl:items-start">
-        <div className="rounded-lg border border-border bg-surface p-4 @4xl:w-95 @4xl:shrink-0">
+      <div className="flex flex-col gap-4.5 @two-column:flex-row @two-column:items-start">
+        <div className="rounded-lg border border-border bg-surface p-4 @two-column:w-95 @two-column:shrink-0">
           {factWidths.map((width, index) => (
             <Skeleton key={width} className={cx('h-2.5', width, index > 0 && 'mt-4.5')} />
           ))}

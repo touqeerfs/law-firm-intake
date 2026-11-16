@@ -114,6 +114,8 @@
 
   --container-page: 92.5rem;
   --container-narrow: 57.5rem;
+  --container-header-row: 34rem;
+  --container-two-column: 54rem;
 
   --animate-slot-in: slot-in 180ms ease-out;
   --animate-landed: landed 1.6s ease-out;

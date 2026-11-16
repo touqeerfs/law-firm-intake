@@ -12,15 +12,15 @@ type ContactHeaderProps = {
   contact: Contact;
 };
 
-const actionClasses = cx(buttonClasses(), 'flex-1 @lg:flex-none');
+const actionClasses = cx(buttonClasses(), 'flex-1 @header-row:flex-none');
 
 export function ContactHeader({ contact }: ContactHeaderProps) {
   return (
-    <header className="mb-4 flex flex-col gap-4 @lg:flex-row @lg:items-start @lg:justify-between">
+    <header className="mb-4 flex flex-col gap-4 @header-row:flex-row @header-row:items-start @header-row:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         <Avatar name={contact.name} size="lg" />
         <div className="min-w-0">
-          <h1 className="font-display text-2xl font-semibold tracking-tighter @lg:text-4xl">
+          <h1 className="font-display text-2xl font-semibold tracking-tighter @header-row:text-4xl">
             {contact.name}
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
