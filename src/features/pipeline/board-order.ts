@@ -37,12 +37,23 @@ function followUpAfterMove(contact: Contact, to: Status, now: Date): string | nu
   return contact.followUpAt;
 }
 
-export function applyMove(contact: Contact, move: StatusMove, now: Date): Contact {
+function movedTo(contact: Contact, to: Status, now: Date): Contact {
   return {
     ...contact,
-    status: move.to,
-    closeReason: move.to === 'closed' ? move.closeReason : null,
-    followUpAt: followUpAfterMove(contact, move.to, now),
+    status: to,
+    followUpAt: followUpAfterMove(contact, to, now),
     statusChangedAt: now.toISOString(),
   };
+}
+
+export function applyMove(contact: Contact, move: StatusMove, now: Date): Contact {
+  return {
+    ...movedTo(contact, move.to, now),
+    closeReason: move.to === 'closed' ? move.closeReason : null,
+  };
+}
+
+export function landingIndex(column: Contact[], contact: Contact, to: Status, now: Date): number {
+  const moved = movedTo(contact, to, now);
+  return [...column, moved].toSorted(columnOrder[to]).indexOf(moved);
 }

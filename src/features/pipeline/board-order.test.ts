@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Contact } from '@/features/contacts/contact-model';
-import { applyMove, boardColumns } from './board-order';
+import { applyMove, boardColumns, landingIndex } from './board-order';
 
 function localIso(day: number, hour = 10): string {
   return new Date(2026, 10, day, hour).toISOString();
@@ -82,5 +82,27 @@ describe('applyMove', () => {
     const moved = applyMove(contact, { to: 'closed', closeReason: 'retained', note: '' }, now);
 
     expect(moved).toMatchObject({ status: 'closed', closeReason: 'retained', followUpAt: null });
+  });
+});
+
+describe('landingIndex', () => {
+  const now = new Date(2026, 10, 16, 15);
+  const activeColumn = [
+    buildContact({ status: 'active', name: 'Overdue', followUpAt: localIso(14) }),
+    buildContact({ status: 'active', name: 'Earlier today', followUpAt: localIso(16, 9) }),
+    buildContact({ status: 'active', name: 'Later today', followUpAt: localIso(16, 17) }),
+    buildContact({ status: 'active', name: 'Tomorrow', followUpAt: localIso(17) }),
+  ];
+
+  it('puts a lead due today after active contacts due earlier and before those due later', () => {
+    const lead = buildContact({ followUpAt: localIso(16, 12) });
+
+    expect(landingIndex(activeColumn, lead, 'active', now)).toBe(2);
+  });
+
+  it('puts a reopened contact with no follow-up at the start of today', () => {
+    const closed = buildContact({ status: 'closed', closeReason: 'unresponsive' });
+
+    expect(landingIndex(activeColumn, closed, 'active', now)).toBe(1);
   });
 });
