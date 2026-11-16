@@ -16,7 +16,7 @@ type BoardColumnProps = {
   state: BoardState;
   isCurrent: boolean;
   movingId: string | null;
-  lastMovedId: string | null;
+  landedId: string | null;
   dragged: Contact | null;
   onMove: (contact: Contact, to: Status) => void;
 };
@@ -39,7 +39,7 @@ export function BoardColumn({
   state,
   isCurrent,
   movingId,
-  lastMovedId,
+  landedId,
   dragged,
   onMove,
 }: BoardColumnProps) {
@@ -55,7 +55,7 @@ export function BoardColumn({
       <PipelineCard
         contact={contact}
         isSaving={contact.id === movingId}
-        isLastMoved={contact.id === lastMovedId}
+        isLanded={contact.id === landedId}
         onMove={onMove}
       />
     </li>

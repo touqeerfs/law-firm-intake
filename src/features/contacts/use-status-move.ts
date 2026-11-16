@@ -25,6 +25,6 @@ export function useStatusMove() {
     confirmClose,
     cancelClose: () => setClosing(null),
     movingId: moveContact.isPending ? moveContact.variables.contact.id : null,
-    lastMovedId: moveContact.variables?.contact.id ?? null,
+    lastMovedId: moveContact.isError ? null : (moveContact.variables?.contact.id ?? null),
   };
 }

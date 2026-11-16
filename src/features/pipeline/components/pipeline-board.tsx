@@ -36,7 +36,7 @@ export function PipelineBoard() {
     useStatusMove();
   const [mobileStatus, setMobileStatus] = useState<Status>('lead');
   const columns = useMemo(() => boardColumns(contacts ?? []), [contacts]);
-  const { dragged, contextProps } = useBoardDrag(contacts ?? [], requestMove);
+  const { dragged, droppedId, contextProps } = useBoardDrag(contacts ?? [], requestMove);
 
   // A failed refetch keeps the last good list, so only a first load without data shows the error
   const state: BoardState = isPending ? 'loading' : contacts ? 'ready' : 'error';
@@ -95,7 +95,7 @@ export function PipelineBoard() {
               state={state}
               isCurrent={status === mobileStatus}
               movingId={movingId}
-              lastMovedId={lastMovedId}
+              landedId={lastMovedId === droppedId ? lastMovedId : null}
               dragged={dragged}
               onMove={requestMove}
             />

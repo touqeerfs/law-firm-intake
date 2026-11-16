@@ -6,10 +6,12 @@ import {
   rectIntersection,
   useSensor,
   useSensors,
+  type Active,
   type Announcements,
   type CollisionDetection,
   type DndContextProps,
   type KeyboardCoordinateGetter,
+  type Over,
   type UniqueIdentifier,
 } from '@dnd-kit/core';
 import {
@@ -19,7 +21,19 @@ import {
   type Status,
 } from '@/features/contacts/contact-model';
 
+const DRAG_START_DISTANCE_PX = 6;
 const COLUMN_INSET_PX = 6;
+const CANCELLED = 'Cancelled.';
+
+type DragResult = {
+  active: Active;
+  over: Over | null;
+};
+
+type Drop = {
+  contact: Contact;
+  to: Status;
+};
 
 function toStatus(id: UniqueIdentifier | undefined): Status | null {
   return statusSchema.safeParse(id).data ?? null;
@@ -47,8 +61,9 @@ const jumpToColumn: KeyboardCoordinateGetter = (event, { context }) => {
 
 export function useBoardDrag(contacts: Contact[], onMove: (contact: Contact, to: Status) => void) {
   const [dragged, setDragged] = useState<Contact | null>(null);
+  const [droppedId, setDroppedId] = useState<string | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: DRAG_START_DISTANCE_PX } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: jumpToColumn,
       keyboardCodes: { start: ['Space'], cancel: ['Escape'], end: ['Space'] },
@@ -58,6 +73,12 @@ export function useBoardDrag(contacts: Contact[], onMove: (contact: Contact, to:
   const findContact = (id: UniqueIdentifier) => contacts.find((contact) => contact.id === id);
   const nameOf = (id: UniqueIdentifier) => findContact(id)?.name ?? 'The card';
 
+  function dropOf({ active, over }: DragResult): Drop | null {
+    const contact = findContact(active.id);
+    const to = toStatus(over?.id);
+    return contact && to && to !== contact.status ? { contact, to } : null;
+  }
+
   const announcements: Announcements = {
     onDragStart: ({ active }) => `Picked up ${nameOf(active.id)}.`,
     onDragOver: ({ active, over }) => {
@@ -66,14 +87,14 @@ export function useBoardDrag(contacts: Contact[], onMove: (contact: Contact, to:
         ? `${nameOf(active.id)} is over ${statusDetails[to].label}.`
         : `${nameOf(active.id)} is not over a column.`;
     },
-    onDragEnd: ({ active, over }) => {
-      const contact = findContact(active.id);
-      const to = toStatus(over?.id);
-      return contact && to && to !== contact.status
-        ? `Moved ${contact.name} to ${statusDetails[to].label}.`
-        : 'Cancelled.';
+    onDragEnd: (result) => {
+      const drop = dropOf(result);
+      if (!drop) return CANCELLED;
+      return drop.to === 'closed'
+        ? `Dropped ${drop.contact.name} on Closed. Choose a close reason.`
+        : `Moved ${drop.contact.name} to ${statusDetails[drop.to].label}.`;
     },
-    onDragCancel: () => 'Cancelled.',
+    onDragCancel: () => CANCELLED,
   };
 
   const contextProps: DndContextProps = {
@@ -87,13 +108,14 @@ export function useBoardDrag(contacts: Contact[], onMove: (contact: Contact, to:
     },
     onDragStart: ({ active }) => setDragged(findContact(active.id) ?? null),
     onDragCancel: () => setDragged(null),
-    onDragEnd: ({ active, over }) => {
+    onDragEnd: (result) => {
       setDragged(null);
-      const contact = findContact(active.id);
-      const to = toStatus(over?.id);
-      if (contact && to) onMove(contact, to);
+      const drop = dropOf(result);
+      if (!drop) return;
+      setDroppedId(drop.contact.id);
+      onMove(drop.contact, drop.to);
     },
   };
 
-  return { dragged, contextProps };
+  return { dragged, droppedId, contextProps };
 }

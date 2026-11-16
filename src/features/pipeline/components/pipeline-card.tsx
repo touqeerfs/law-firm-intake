@@ -12,7 +12,7 @@ import { CardMenu } from './card-menu';
 type PipelineCardProps = {
   contact: Contact;
   isSaving: boolean;
-  isLastMoved: boolean;
+  isLanded: boolean;
   onMove: (contact: Contact, to: Status) => void;
 };
 
@@ -21,19 +21,19 @@ const actionClasses = cx(
   'max-desktop:hidden',
 );
 
-export function PipelineCard({ contact, isSaving, isLastMoved, onMove }: PipelineCardProps) {
+export function PipelineCard({ contact, isSaving, isLanded, onMove }: PipelineCardProps) {
   const { setNodeRef, setActivatorNodeRef, node, listeners, attributes, isDragging } = useDraggable(
     { id: contact.id },
   );
   const nameRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    if (!isLastMoved) return;
+    if (!isLanded) return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     node.current?.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
     // The card remounts in its new column, so focus that was on the old copy falls back to the page
     if (document.activeElement === document.body) nameRef.current?.focus({ preventScroll: true });
-  }, [isLastMoved, node]);
+  }, [isLanded, node]);
 
   return (
     <article
@@ -42,9 +42,9 @@ export function PipelineCard({ contact, isSaving, isLastMoved, onMove }: Pipelin
       aria-busy={isSaving}
       className={cx(
         cardClasses(contact),
-        'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md',
+        'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md motion-reduce:transition-none',
         isDragging && 'scale-98 opacity-40',
-        isLastMoved && 'motion-safe:animate-landed',
+        isLanded && 'motion-safe:animate-landed',
       )}
     >
       {isSaving && (
