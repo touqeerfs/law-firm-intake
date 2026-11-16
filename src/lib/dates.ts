@@ -22,6 +22,22 @@ export function startOfDay(date: Date): Date {
   return start;
 }
 
+export function addDays(date: Date, days: number): Date {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+export function toDateInputValue(date: Date): string {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+export function fromDateInputValue(value: string): string {
+  return new Date(`${value}T10:00`).toISOString();
+}
+
 export function calendarDaysBetween(from: Date, to: Date): number {
   // Rounding absorbs the 23- or 25-hour days around daylight-saving changes
   return Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / DAY_MS);

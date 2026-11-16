@@ -161,6 +161,11 @@ export const contactSchema = z.object({
 });
 export type Contact = z.infer<typeof contactSchema>;
 
+export type ContactInput = Omit<
+  Contact,
+  'id' | 'createdAt' | 'statusChangedAt' | 'lastContactedAt'
+>;
+
 export const activityTypeSchema = z.enum([
   'created',
   'call',
