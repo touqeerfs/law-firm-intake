@@ -1,6 +1,7 @@
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
 import { isLayerOpen, isTypingIn, PAGE_SEARCH_ID } from '@/lib/keyboard';
+import { navItems } from './nav-items';
 
 export type ShellDialog = 'palette' | 'shortcuts';
 
@@ -30,8 +31,8 @@ export function useGlobalShortcuts(setOpenDialog: Dispatch<SetStateAction<ShellD
       const key = event.key.toLowerCase();
       if (Date.now() - goPressedAt < GO_TO_WINDOW_MS) {
         goPressedAt = 0;
-        if (key === 'p') router.push('/pipeline');
-        if (key === 'c') router.push('/contacts');
+        if (key === 'p') router.push(navItems.pipeline.href);
+        if (key === 'c') router.push(navItems.contacts.href);
         return;
       }
 

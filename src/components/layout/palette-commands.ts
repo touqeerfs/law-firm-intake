@@ -10,11 +10,11 @@ export type PaletteCommand = {
 };
 
 type CommandActions = {
-  go: (href: string) => void;
+  navigate: (href: string) => void;
   showShortcuts: () => void;
 };
 
-export function paletteCommands({ go, showShortcuts }: CommandActions): PaletteCommand[] {
+export function paletteCommands({ navigate, showShortcuts }: CommandActions): PaletteCommand[] {
   const { pipeline, contacts, followUpsDue } = navItems;
   return [
     {
@@ -22,25 +22,29 @@ export function paletteCommands({ go, showShortcuts }: CommandActions): PaletteC
       subtitle: 'Open the intake form',
       icon: Plus,
       keys: ['N'],
-      run: () => go('/contacts/new'),
+      run: () => navigate('/contacts/new'),
     },
     {
       title: 'Go to pipeline',
       icon: pipeline.icon,
       keys: ['G', 'P'],
-      run: () => go(pipeline.href),
+      run: () => navigate(pipeline.href),
     },
     {
       title: 'Go to contacts',
       icon: contacts.icon,
       keys: ['G', 'C'],
-      run: () => go(contacts.href),
+      run: () => navigate(contacts.href),
     },
-    { title: 'Show follow-ups due', icon: followUpsDue.icon, run: () => go(followUpsDue.href) },
+    {
+      title: 'Show follow-ups due',
+      icon: followUpsDue.icon,
+      run: () => navigate(followUpsDue.href),
+    },
     {
       title: 'Show inquiries not contacted yet',
       icon: PhoneIncoming,
-      run: () => go('/contacts?view=not-contacted'),
+      run: () => navigate('/contacts?view=not-contacted'),
     },
     { title: 'Keyboard shortcuts', icon: Keyboard, keys: ['?'], run: showShortcuts },
   ];

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState, type KeyboardEvent } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import * as RadixDialog from '@radix-ui/react-dialog';
 import { Search } from 'lucide-react';
@@ -13,11 +13,13 @@ import { normalizeText } from '@/lib/text';
 import { paletteCommands } from './palette-commands';
 import { PaletteFooter } from './palette-footer';
 import { PaletteGroup } from './palette-item';
-import { CommandOption, ContactOption, NoMatchesOption } from './palette-options';
+import { CommandOption, ContactOption, NewInquiryOption } from './palette-options';
+import { useActiveOption } from './use-active-option';
 
 type CommandPaletteProps = {
   onClose: () => void;
   onShowShortcuts: () => void;
+  onFocusReturned: () => void;
 };
 
 const RECENT_LIMIT = 5;
@@ -28,50 +30,31 @@ function contactsFor(contacts: Contact[], search: string): Contact[] {
   return contacts.filter((contact) => matchesSearch(contact, search)).slice(0, MATCH_LIMIT);
 }
 
-export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps) {
+export function CommandPalette({ onClose, onShowShortcuts, onFocusReturned }: CommandPaletteProps) {
   const router = useRouter();
   const returnFocus = useReturnFocus();
-  const listId = useId();
   const { data } = useContacts();
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState(0);
 
-  function go(href: string) {
+  function navigate(href: string) {
     onClose();
     router.push(href);
   }
 
-  const search = query.trim();
-  const contacts = contactsFor(data ?? [], search);
-  const commands = paletteCommands({ go, showShortcuts: onShowShortcuts }).filter((command) =>
-    normalizeText(command.title).includes(normalizeText(search)),
-  );
-  const optionCount = Math.max(contacts.length + commands.length, 1);
-  const activeIndex = Math.min(selected, optionCount - 1);
-  const optionId = (index: number) => `${listId}-option-${index}`;
-  const activeId = optionId(activeIndex);
-
-  useEffect(() => {
-    document.getElementById(activeId)?.scrollIntoView({ block: 'nearest' });
-  }, [activeId]);
-
-  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      const step = event.key === 'ArrowDown' ? 1 : -1;
-      setSelected((activeIndex + step + optionCount) % optionCount);
-    }
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      document.getElementById(activeId)?.click();
-    }
+  function handleCloseAutoFocus(event: Event) {
+    returnFocus(event);
+    onFocusReturned();
   }
 
-  const optionProps = (index: number) => ({
-    id: optionId(index),
-    selected: index === activeIndex,
-    onHover: () => setSelected(index),
-  });
+  const search = query.trim();
+  const contacts = contactsFor(data ?? [], search);
+  const commands = paletteCommands({ navigate, showShortcuts: onShowShortcuts }).filter((command) =>
+    normalizeText(command.title).includes(normalizeText(search)),
+  );
+  const hasMatches = contacts.length + commands.length > 0;
+  const { listId, activeId, optionProps, handleKeyDown, resetActiveOption } = useActiveOption(
+    Math.max(contacts.length + commands.length, 1),
+  );
 
   return (
     <RadixDialog.Root open onOpenChange={(open) => !open && onClose()}>
@@ -79,7 +62,7 @@ export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps
         <RadixDialog.Overlay className="fixed inset-0 z-50 bg-text/30 backdrop-blur-xs" />
         <RadixDialog.Content
           aria-describedby={undefined}
-          onCloseAutoFocus={returnFocus}
+          onCloseAutoFocus={handleCloseAutoFocus}
           className="fixed inset-x-2 top-2 z-50 overflow-hidden rounded-xl border border-border bg-surface shadow-lg desktop:top-24 desktop:right-auto desktop:left-1/2 desktop:w-160 desktop:-translate-x-1/2"
         >
           <RadixDialog.Title className="sr-only">Search and commands</RadixDialog.Title>
@@ -95,7 +78,7 @@ export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
-                setSelected(0);
+                resetActiveOption();
               }}
               onKeyDown={handleKeyDown}
               placeholder="Search contacts, or type a command…"
@@ -108,6 +91,11 @@ export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps
             </span>
           </div>
 
+          {!hasMatches && (
+            <p className="px-4 pt-5 pb-1.5 text-center text-muted">
+              No contacts or commands match &ldquo;{search}&rdquo;.
+            </p>
+          )}
           <div
             id={listId}
             role="listbox"
@@ -122,7 +110,7 @@ export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps
                     {...optionProps(index)}
                     contact={contact}
                     search={search}
-                    onSelect={() => go(`/contacts/${contact.id}`)}
+                    onSelect={() => navigate(`/contacts/${contact.id}`)}
                   />
                 ))}
               </PaletteGroup>
@@ -139,11 +127,11 @@ export function CommandPalette({ onClose, onShowShortcuts }: CommandPaletteProps
                 ))}
               </PaletteGroup>
             )}
-            {contacts.length + commands.length === 0 && (
-              <NoMatchesOption
+            {!hasMatches && (
+              <NewInquiryOption
                 {...optionProps(0)}
                 search={search}
-                onSelect={() => go(`/contacts/new?name=${encodeURIComponent(search)}`)}
+                onSelect={() => navigate(`/contacts/new?name=${encodeURIComponent(search)}`)}
               />
             )}
           </div>

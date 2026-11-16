@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
-import { Kbd } from '@/components/ui/kbd';
+import { KeyCombo } from '@/components/ui/kbd';
 
 type ShortcutsDialogProps = {
   onClose: () => void;
@@ -32,9 +32,7 @@ export function ShortcutsDialog({ onClose }: ShortcutsDialogProps) {
           >
             <dt className="text-text-2">{label}</dt>
             <dd className="flex gap-1">
-              {keys.map((key) => (
-                <Kbd key={key}>{key}</Kbd>
-              ))}
+              <KeyCombo keys={keys} />
             </dd>
           </div>
         ))}

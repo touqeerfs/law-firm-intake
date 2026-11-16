@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Highlight } from '@/components/ui/highlight';
-import { Kbd } from '@/components/ui/kbd';
+import { KeyCombo } from '@/components/ui/kbd';
 import { ContactStatusPill } from '@/features/contacts/components/contact-fields';
 import { attorneys, type Contact } from '@/features/contacts/contact-model';
 import type { PaletteCommand } from './palette-commands';
@@ -12,7 +12,7 @@ type ContactOptionProps = PaletteOptionProps & {
   search: string;
 };
 
-type NoMatchesOptionProps = PaletteOptionProps & {
+type NewInquiryOptionProps = PaletteOptionProps & {
   search: string;
 };
 
@@ -38,17 +38,12 @@ export function ContactOption({ contact, search, ...optionProps }: ContactOption
   );
 }
 
-export function NoMatchesOption({ search, ...optionProps }: NoMatchesOptionProps) {
+export function NewInquiryOption({ search, ...optionProps }: NewInquiryOptionProps) {
   return (
-    <>
-      <p className="px-4 pt-5 pb-3 text-center text-muted">
-        No contacts or commands match &ldquo;{search}&rdquo;.
-      </p>
-      <PaletteItem {...optionProps}>
-        <PaletteIcon icon={Plus} />
-        <PaletteText title={`Log “${search}” as a new inquiry`} />
-      </PaletteItem>
-    </>
+    <PaletteItem {...optionProps}>
+      <PaletteIcon icon={Plus} />
+      <PaletteText title={`Log “${search}” as a new inquiry`} />
+    </PaletteItem>
   );
 }
 
@@ -59,9 +54,7 @@ export function CommandOption({ command, ...optionProps }: CommandOptionProps) {
       <PaletteText title={command.title} subtitle={command.subtitle} />
       {command.keys && (
         <span aria-hidden className="hidden gap-1 desktop:flex">
-          {command.keys.map((key) => (
-            <Kbd key={key}>{key}</Kbd>
-          ))}
+          <KeyCombo keys={command.keys} />
         </span>
       )}
     </PaletteItem>

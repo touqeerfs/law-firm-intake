@@ -2,7 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Kbd } from '@/components/ui/kbd';
+import { KeyCombo } from '@/components/ui/kbd';
 import { useOpenPalette } from './shell-dialogs';
 
 export function SidebarSearchButton() {
@@ -17,8 +17,7 @@ export function SidebarSearchButton() {
       <Search className="size-3.5" aria-hidden />
       Search or jump to…
       <span aria-hidden className="ml-auto flex gap-0.5">
-        <Kbd>⌘</Kbd>
-        <Kbd>K</Kbd>
+        <KeyCombo keys={['⌘', 'K']} />
       </span>
     </button>
   );

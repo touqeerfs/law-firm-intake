@@ -1,4 +1,4 @@
-import { Kbd } from '@/components/ui/kbd';
+import { Kbd, KeyCombo } from '@/components/ui/kbd';
 
 export function PaletteFooter() {
   return (
@@ -7,8 +7,7 @@ export function PaletteFooter() {
       className="hidden gap-4 border-t border-border bg-surface-2 px-4 py-2.5 text-xs text-muted desktop:flex"
     >
       <span className="inline-flex items-center gap-1.5">
-        <Kbd>↑</Kbd>
-        <Kbd>↓</Kbd>
+        <KeyCombo keys={['↑', '↓']} />
         navigate
       </span>
       <span className="inline-flex items-center gap-1.5">
