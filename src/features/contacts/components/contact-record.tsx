@@ -40,7 +40,7 @@ function ContactNotFound({ id }: ContactRecordProps) {
   );
 }
 
-export function ContactRecord({ id }: ContactRecordProps) {
+function RecordContent({ id }: ContactRecordProps) {
   const { data, error, isPending, isError, isFetching, refetch } = useContact(id);
   const { changeData } = useDemoControls();
   const { requestMove, closing, confirmClose, cancelClose } = useStatusMove();
@@ -69,8 +69,8 @@ export function ContactRecord({ id }: ContactRecordProps) {
       <ContactHeader contact={contact} />
       <StatusStepper contact={contact} onMove={(to) => requestMove(contact, to)} />
       <ContactBanners contact={contact} />
-      <div className="flex flex-col gap-4.5 wide:flex-row wide:items-start">
-        <div className="flex flex-col gap-3.5 wide:w-95 wide:shrink-0">
+      <div className="flex flex-col gap-4.5 @4xl:flex-row @4xl:items-start">
+        <div className="flex flex-col gap-3.5 @4xl:w-95 @4xl:shrink-0">
           <MatterCard contact={contact} />
           <ContactDetailsCard contact={contact} />
         </div>
@@ -80,5 +80,13 @@ export function ContactRecord({ id }: ContactRecordProps) {
         <CloseReasonDialog contact={closing} onConfirm={confirmClose} onCancel={cancelClose} />
       )}
     </>
+  );
+}
+
+export function ContactRecord({ id }: ContactRecordProps) {
+  return (
+    <div className="@container">
+      <RecordContent id={id} />
+    </div>
   );
 }
