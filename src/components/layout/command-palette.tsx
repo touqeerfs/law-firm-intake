@@ -59,7 +59,7 @@ export function CommandPalette({ onClose, onShowShortcuts, onFocusReturned }: Co
   return (
     <RadixDialog.Root open onOpenChange={(open) => !open && onClose()}>
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-text/30 backdrop-blur-xs" />
+        <RadixDialog.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-xs" />
         <RadixDialog.Content
           aria-describedby={undefined}
           onCloseAutoFocus={handleCloseAutoFocus}

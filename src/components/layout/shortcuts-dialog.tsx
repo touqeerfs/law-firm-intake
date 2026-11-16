@@ -12,6 +12,7 @@ const shortcuts = [
   { label: 'Log a new inquiry', keys: ['N'] },
   { label: 'Go to pipeline', keys: ['G', 'P'] },
   { label: 'Go to contacts', keys: ['G', 'C'] },
+  { label: 'Next / previous in quick look', keys: ['J', 'K'] },
   { label: 'Save note or form', keys: ['⌘', '↵'] },
   { label: 'Close panel, menu or dialog', keys: ['Esc'] },
   { label: 'Show this list', keys: ['?'] },
