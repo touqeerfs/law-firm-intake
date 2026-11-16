@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react';
-import type { LucideIcon } from 'lucide-react';
+import { ArrowRight, type LucideIcon } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { statusDetails, type Status } from '@/features/contacts/contact-model';
+import { columnSortHints } from '../board-order';
+
+type DropSlotProps = {
+  status: Status;
+};
 
 type ColumnPlaceholderProps = {
   icon: LucideIcon;
@@ -27,6 +33,18 @@ export function SkeletonCard() {
         </div>
       </div>
       <Skeleton className="mt-3.5 h-4.5 w-2/5" />
+    </div>
+  );
+}
+
+export function DropSlot({ status }: DropSlotProps) {
+  return (
+    <div className="flex h-16 flex-col items-center justify-center gap-0.5 overflow-hidden rounded-md border border-dashed border-accent/55 bg-accent-soft text-sm font-semibold text-accent-text motion-safe:animate-slot-in">
+      <span className="inline-flex items-center gap-1.5">
+        <ArrowRight className="size-3.5" aria-hidden />
+        Lands here in {statusDetails[status].label}
+      </span>
+      <small className="text-xs font-medium opacity-80">{columnSortHints[status]}</small>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { PageHeader } from '@/components/layout/page-header';
 import { CloseReasonDialog } from '@/features/contacts/components/close-reason-dialog';
 import { ContactsLoadError } from '@/features/contacts/components/contacts-load-error';
@@ -9,8 +10,10 @@ import { useContacts } from '@/features/contacts/use-contacts';
 import { useDemoControls } from '@/features/contacts/use-demo-controls';
 import { useStatusMove } from '@/features/contacts/use-status-move';
 import { boardColumns } from '../board-order';
+import { useBoardDrag } from '../use-board-drag';
 import { BoardColumn, type BoardState } from './board-column';
 import { BoardTabs } from './board-tabs';
+import { CardOverlay } from './card-face';
 
 type BoardSummaryProps = {
   contacts: Contact[];
@@ -29,9 +32,11 @@ function BoardSummary({ contacts }: BoardSummaryProps) {
 export function PipelineBoard() {
   const { data: contacts, error, isPending, isFetching, refetch } = useContacts();
   const { changeData } = useDemoControls();
-  const { requestMove, closing, confirmClose, cancelClose, movingId } = useStatusMove();
+  const { requestMove, closing, confirmClose, cancelClose, movingId, lastMovedId } =
+    useStatusMove();
   const [mobileStatus, setMobileStatus] = useState<Status>('lead');
   const columns = useMemo(() => boardColumns(contacts ?? []), [contacts]);
+  const { dragged, contextProps } = useBoardDrag(contacts ?? [], requestMove);
 
   // A failed refetch keeps the last good list, so only a first load without data shows the error
   const state: BoardState = isPending ? 'loading' : contacts ? 'ready' : 'error';
@@ -77,19 +82,29 @@ export function PipelineBoard() {
         onStatusChange={setMobileStatus}
       />
 
-      <div aria-busy={state === 'loading'} className="grid items-start gap-3.5 desktop:grid-cols-3">
-        {statusSchema.options.map((status) => (
-          <BoardColumn
-            key={status}
-            status={status}
-            contacts={columns[status]}
-            state={state}
-            isCurrent={status === mobileStatus}
-            movingId={movingId}
-            onMove={requestMove}
-          />
-        ))}
-      </div>
+      <DndContext {...contextProps}>
+        <div
+          aria-busy={state === 'loading'}
+          className="grid items-start gap-3.5 desktop:grid-cols-3"
+        >
+          {statusSchema.options.map((status) => (
+            <BoardColumn
+              key={status}
+              status={status}
+              contacts={columns[status]}
+              state={state}
+              isCurrent={status === mobileStatus}
+              movingId={movingId}
+              lastMovedId={lastMovedId}
+              dragged={dragged}
+              onMove={requestMove}
+            />
+          ))}
+        </div>
+        <DragOverlay dropAnimation={null}>
+          {dragged && <CardOverlay contact={dragged} />}
+        </DragOverlay>
+      </DndContext>
 
       {closing && (
         <CloseReasonDialog contact={closing} onConfirm={confirmClose} onCancel={cancelClose} />

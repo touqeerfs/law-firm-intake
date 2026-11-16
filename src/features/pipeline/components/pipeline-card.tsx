@@ -1,17 +1,18 @@
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useDraggable } from '@dnd-kit/core';
 import { PenLine, Phone } from 'lucide-react';
-import { Avatar } from '@/components/ui/avatar';
 import { buttonClasses } from '@/components/ui/button';
-import { TimeInStatus } from '@/features/contacts/components/contact-fields';
 import type { Contact, Status } from '@/features/contacts/contact-model';
 import { phoneHref } from '@/features/contacts/contact-rules';
 import { cx } from '@/lib/cx';
-import { AttorneyAvatar, CardTags, ConflictMark } from './card-details';
+import { CardFace, cardClasses, nameClasses } from './card-face';
 import { CardMenu } from './card-menu';
 
 type PipelineCardProps = {
   contact: Contact;
   isSaving: boolean;
+  isLastMoved: boolean;
   onMove: (contact: Contact, to: Status) => void;
 };
 
@@ -20,48 +21,52 @@ const actionClasses = cx(
   'max-desktop:hidden',
 );
 
-export function PipelineCard({ contact, isSaving, onMove }: PipelineCardProps) {
+export function PipelineCard({ contact, isSaving, isLastMoved, onMove }: PipelineCardProps) {
+  const { setNodeRef, setActivatorNodeRef, node, listeners, attributes, isDragging } = useDraggable(
+    { id: contact.id },
+  );
+  const nameRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (!isLastMoved) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    node.current?.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    // The card remounts in its new column, so focus that was on the old copy falls back to the page
+    if (document.activeElement === document.body) nameRef.current?.focus({ preventScroll: true });
+  }, [isLastMoved, node]);
+
   return (
     <article
+      ref={setNodeRef}
+      {...listeners}
       aria-busy={isSaving}
       className={cx(
-        'group relative rounded-md border bg-surface p-3 shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md',
-        contact.conflictCheck === 'flagged' ? 'border-danger/40' : 'border-border',
+        cardClasses(contact),
+        'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md',
+        isDragging && 'scale-98 opacity-40',
+        isLastMoved && 'motion-safe:animate-landed',
       )}
     >
       {isSaving && (
         <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 saving-shimmer rounded-full" />
       )}
 
-      <div className="flex items-start gap-2.5">
-        <Avatar name={contact.name} />
-        <div className="min-w-0 flex-1 pr-6 desktop:pr-0">
+      <CardFace
+        contact={contact}
+        name={
           <Link
+            ref={(link) => {
+              nameRef.current = link;
+              setActivatorNodeRef(link);
+            }}
             href={`/contacts/${contact.id}`}
-            className="block truncate font-semibold tracking-snug after:absolute after:inset-0 after:rounded-md"
+            aria-describedby={attributes['aria-describedby']}
+            className={cx(nameClasses, 'after:absolute after:inset-0 after:rounded-md')}
           >
             {contact.name}
           </Link>
-          <p className="truncate text-xs text-muted">
-            {contact.id} · {contact.matterType}
-          </p>
-        </div>
-        <span className="hidden transition-opacity group-focus-within:opacity-0 group-hover:opacity-0 group-has-aria-expanded:opacity-0 desktop:block">
-          <ConflictMark contact={contact} />
-        </span>
-      </div>
-
-      <div className="mt-2.5 flex flex-wrap gap-1.5 empty:hidden">
-        <CardTags contact={contact} />
-      </div>
-
-      <div className="mt-3 flex items-center gap-2">
-        <TimeInStatus contact={contact} />
-        <span className="truncate text-xs text-muted">{contact.source}</span>
-        <span className="ml-auto">
-          <AttorneyAvatar contact={contact} />
-        </span>
-      </div>
+        }
+      />
 
       <div className="absolute top-1.5 right-1.5 z-10 flex gap-0.5 rounded-sm desktop:top-2 desktop:right-2 desktop:border desktop:border-border desktop:bg-surface desktop:p-0.5 desktop:opacity-0 desktop:shadow-md desktop:transition-opacity desktop:group-focus-within:opacity-100 desktop:group-hover:opacity-100 desktop:has-aria-expanded:opacity-100">
         {contact.phone && (
