@@ -8,7 +8,7 @@ import { useListParams } from '../use-list-params';
 import { ContactCards } from './contact-cards';
 import { ContactsTable } from './contacts-table';
 import { ListViewTabs } from './list-view-tabs';
-import { NoMatches } from './no-matches';
+import { EmptyView, NoSearchMatches } from './no-matches';
 import { SearchBox } from './search-box';
 import { SortMenu } from './sort-menu';
 
@@ -53,8 +53,10 @@ export function FilteredContacts({ contacts }: FilteredContactsProps) {
         </div>
       </div>
 
-      {visible.length === 0 ? (
-        <NoMatches query={query} view={view} onClearFilters={clearFilters} />
+      {searched.length === 0 ? (
+        <NoSearchMatches query={query} onClearFilters={clearFilters} />
+      ) : visible.length === 0 ? (
+        <EmptyView view={view} onClearFilters={clearFilters} />
       ) : (
         <>
           <div className="mb-2 flex min-h-7.5 items-center justify-between gap-2 text-sm text-muted">
