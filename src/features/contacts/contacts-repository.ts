@@ -127,6 +127,11 @@ export function createContactsRepository({
       return readStore().contacts;
     },
 
+    async listActivities(): Promise<Activity[]> {
+      await simulateNetwork();
+      return readStore().activities;
+    },
+
     async getContact(id: string): Promise<ContactDetail> {
       await simulateNetwork();
       const store = readStore();

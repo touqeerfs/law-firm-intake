@@ -41,6 +41,7 @@ export function useContactMutations() {
       Promise.all([
         queryClient.invalidateQueries({ queryKey: contactKeys.detail(contactId) }),
         queryClient.invalidateQueries({ queryKey: contactKeys.list() }),
+        queryClient.invalidateQueries({ queryKey: contactKeys.activities() }),
       ]),
   });
 

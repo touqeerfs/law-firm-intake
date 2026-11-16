@@ -15,3 +15,10 @@ export function useContact(id: string) {
     queryFn: () => getContactsRepository().getContact(id),
   });
 }
+
+export function useActivities() {
+  return useQuery({
+    queryKey: contactKeys.activities(),
+    queryFn: () => getContactsRepository().listActivities(),
+  });
+}
