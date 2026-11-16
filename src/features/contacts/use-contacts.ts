@@ -1,0 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import { getContactsRepository } from './browser-repository';
+import { contactKeys } from './query-keys';
+
+export function useContacts() {
+  return useQuery({
+    queryKey: contactKeys.list(),
+    queryFn: () => getContactsRepository().listContacts(),
+  });
+}
