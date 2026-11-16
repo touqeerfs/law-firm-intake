@@ -2,6 +2,8 @@
 
 import { useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Check, X } from 'lucide-react';
+import { Toaster } from 'sonner';
 
 type ProvidersProps = {
   children: ReactNode;
@@ -15,7 +17,29 @@ function createQueryClient() {
   });
 }
 
+const toastIcons = {
+  success: <Check className="size-3.25 text-won" aria-hidden />,
+  error: <X className="size-3.25 text-lost" aria-hidden />,
+};
+
 export function Providers({ children }: ProvidersProps) {
   const [queryClient] = useState(createQueryClient);
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <Toaster
+        position="bottom-right"
+        icons={toastIcons}
+        mobileOffset={{ bottom: 'calc(4.75rem + env(safe-area-inset-bottom))' }}
+        toastOptions={{
+          unstyled: true,
+          classNames: {
+            toast:
+              'flex w-full items-center gap-3 rounded-md bg-text py-2.5 pr-2.5 pl-3.5 text-md text-canvas shadow-lg',
+            icon: 'grid size-5.5 shrink-0 place-items-center rounded-full bg-canvas/12',
+          },
+        }}
+      />
+    </QueryClientProvider>
+  );
 }
