@@ -12,7 +12,18 @@ export function useGlobalShortcuts(setOpenDialog: Dispatch<SetStateAction<ShellD
   useEffect(() => {
     let goPressedAt = 0;
 
+    function focusPageSearchOrOpenPalette() {
+      const pageSearch = document.getElementById(PAGE_SEARCH_ID);
+      if (pageSearch) pageSearch.focus();
+      else setOpenDialog('palette');
+    }
+
     function handleKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setOpenDialog((current) => (current === 'palette' ? null : 'palette'));
+        return;
+      }
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       if (isTypingIn(event.target) || isLayerOpen()) return;
 
@@ -27,7 +38,7 @@ export function useGlobalShortcuts(setOpenDialog: Dispatch<SetStateAction<ShellD
       if (key === 'g') goPressedAt = Date.now();
       else if (key === 'n') router.push('/contacts/new');
       else if (key === '?') setOpenDialog('shortcuts');
-      else if (key === '/') document.getElementById(PAGE_SEARCH_ID)?.focus();
+      else if (key === '/') focusPageSearchOrOpenPalette();
       else return;
       event.preventDefault();
     }

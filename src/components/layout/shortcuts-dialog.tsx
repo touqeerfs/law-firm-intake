@@ -8,7 +8,7 @@ type ShortcutsDialogProps = {
 
 const shortcuts = [
   { label: 'Search or jump to anything', keys: ['⌘', 'K'] },
-  { label: 'Search the contacts list', keys: ['/'] },
+  { label: 'Search contacts', keys: ['/'] },
   { label: 'Log a new inquiry', keys: ['N'] },
   { label: 'Go to pipeline', keys: ['G', 'P'] },
   { label: 'Go to contacts', keys: ['G', 'C'] },

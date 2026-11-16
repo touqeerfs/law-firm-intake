@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import { CommandPalette } from './command-palette';
 import { ShortcutsDialog } from './shortcuts-dialog';
 import { useGlobalShortcuts, type ShellDialog } from './use-global-shortcuts';
 
@@ -17,6 +18,9 @@ export function ShellDialogs({ children }: ShellDialogsProps) {
   return (
     <>
       {children}
+      {openDialog === 'palette' && (
+        <CommandPalette onClose={close} onShowShortcuts={() => setOpenDialog('shortcuts')} />
+      )}
       {openDialog === 'shortcuts' && <ShortcutsDialog onClose={close} />}
     </>
   );
