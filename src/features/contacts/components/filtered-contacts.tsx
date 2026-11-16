@@ -53,6 +53,12 @@ export function FilteredContacts({ contacts }: FilteredContactsProps) {
         </div>
       </div>
 
+      <p aria-live="polite" className="sr-only">
+        {visible.length === 0
+          ? 'No contacts match'
+          : `Showing ${visible.length} of ${contacts.length} contacts`}
+      </p>
+
       {searched.length === 0 ? (
         <NoSearchMatches query={query} onClearFilters={clearFilters} />
       ) : visible.length === 0 ? (
@@ -60,7 +66,7 @@ export function FilteredContacts({ contacts }: FilteredContactsProps) {
       ) : (
         <>
           <div className="mb-2 flex min-h-7.5 items-center justify-between gap-2 text-sm text-muted">
-            <p>
+            <p aria-hidden>
               Showing <b className="font-semibold text-text tabular-nums">{visible.length}</b> of{' '}
               {contacts.length}
             </p>
