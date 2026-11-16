@@ -1,6 +1,6 @@
-import { PageHeader } from '@/components/layout/page-header';
+import { ContactRecord } from '@/features/contacts/components/contact-record';
 
 export default async function ContactPage({ params }: PageProps<'/contacts/[id]'>) {
   const { id } = await params;
-  return <PageHeader title={id} />;
+  return <ContactRecord id={id} />;
 }

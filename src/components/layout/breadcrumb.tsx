@@ -1,13 +1,24 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import { useContact } from '@/features/contacts/use-contacts';
 
 type Crumb = {
-  label: string;
+  label: ReactNode;
   href?: string;
 };
+
+type ContactNameProps = {
+  id: string;
+};
+
+function ContactName({ id }: ContactNameProps) {
+  const { data } = useContact(id);
+  return data?.contact.name ?? id;
+}
 
 const contactsCrumb: Crumb = { label: 'Contacts', href: '/contacts' };
 
@@ -18,9 +29,13 @@ function crumbsFor(pathname: string): Crumb[] {
   if (section !== 'contacts' || rest.length > 0) return [{ label: 'Not found' }];
   if (!id) return [{ label: 'Contacts' }];
   if (id === 'new' && !action) return [contactsCrumb, { label: 'New inquiry' }];
-  if (!action) return [contactsCrumb, { label: id }];
+  if (!action) return [contactsCrumb, { label: <ContactName id={id} /> }];
   if (action === 'edit') {
-    return [contactsCrumb, { label: id, href: `/contacts/${id}` }, { label: 'Edit' }];
+    return [
+      contactsCrumb,
+      { label: <ContactName id={id} />, href: `/contacts/${id}` },
+      { label: 'Edit' },
+    ];
   }
   return [{ label: 'Not found' }];
 }
@@ -32,7 +47,7 @@ export function Breadcrumb() {
     <nav aria-label="Breadcrumb" className="hidden min-w-0 desktop:block">
       <ol className="flex items-center gap-1.5 text-md text-muted">
         {crumbs.map((crumb, index) => (
-          <li key={crumb.label} className="flex min-w-0 items-center gap-1.5">
+          <li key={index} className="flex min-w-0 items-center gap-1.5">
             {index > 0 && <ChevronRight className="size-3.25 text-faint" aria-hidden />}
             {crumb.href ? (
               <Link href={crumb.href} className="hover:text-text">

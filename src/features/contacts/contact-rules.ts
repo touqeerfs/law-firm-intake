@@ -119,3 +119,7 @@ export const contactSorts: Record<ContactSort, { label: string; compare: Compare
 export function sortContacts(contacts: Contact[], sort: ContactSort): Contact[] {
   return contacts.toSorted(contactSorts[sort].compare);
 }
+
+export function phoneHref(phone: string): string {
+  return `tel:${phone.replace(/[^\d+]/g, '')}`;
+}
