@@ -44,6 +44,7 @@ export function FormErrorSummary() {
   return (
     <div
       ref={summaryRef}
+      role="group"
       tabIndex={-1}
       aria-labelledby={titleId}
       className="mb-3.5 rounded-md border border-danger/30 bg-danger-bg px-3.5 py-3 text-danger-fg focus:outline-none"
