@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import * as RadixDialog from '@radix-ui/react-dialog';
+import { useReturnFocus } from './use-return-focus';
 
 type DialogProps = {
   title: string;
@@ -11,16 +12,7 @@ type DialogProps = {
 };
 
 export function Dialog({ title, description, onClose, children }: DialogProps) {
-  const [opener] = useState(() => document.activeElement);
-
-  function returnFocus(event: Event) {
-    event.preventDefault();
-    const target =
-      opener instanceof HTMLElement && opener.isConnected
-        ? opener
-        : document.getElementById('main');
-    target?.focus();
-  }
+  const returnFocus = useReturnFocus();
 
   return (
     <RadixDialog.Root open onOpenChange={(open) => !open && onClose()}>
