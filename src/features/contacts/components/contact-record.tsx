@@ -27,6 +27,7 @@ function ContactNotFound({ id }: ContactRecordProps) {
     <EmptyState
       icon={FolderSearch}
       title={`We couldn't find ${id}`}
+      titleAs="h1"
       action={
         <Link href="/contacts" className={buttonClasses({ variant: 'primary' })}>
           Back to contacts

@@ -27,6 +27,7 @@ export function ContactEditor({ id }: ContactEditorProps) {
         <EmptyState
           icon={FolderSearch}
           title={`We couldn't find ${id}`}
+          titleAs="h1"
           action={
             <Link href="/contacts" className={buttonClasses({ variant: 'primary' })}>
               Back to contacts
