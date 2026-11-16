@@ -26,7 +26,7 @@ src/components/ui/      primitives: Button, Pill, Avatar, Field, Dialog…
 src/components/layout/  app shell: sidebar, top bar, mobile tab bar, demo controls
 src/features/contacts/  model, schemas, rules, repository, hooks, components
 src/features/pipeline/  board ordering rules and board components
-src/lib/                small helpers (cx, dates)
+src/lib/                small helpers (cx, dates, text)
 ```
 
 - **Data flow**: component → hook (`useContacts`, `useContact`, `useContactMutations`) → repository → localStorage. Components never touch storage.
@@ -39,10 +39,10 @@ src/lib/                small helpers (cx, dates)
 
 - **The pipeline is sorted by urgency, not by hand.** Lead and Active show the soonest follow-up first, Closed shows the most recently closed. A dragged card shows exactly where it will land before the drop.
 - **Closing needs a reason.** Every closed inquiry records why (Retained, Hired another firm…). Every move has Undo. Reopening schedules a follow-up for today so the contact isn't forgotten.
-- **Attention signals.** "Not contacted" marks open inquiries with no call or email yet. Time in status turns amber at 7 days and red at 14.
+- **Attention signals.** "Not contacted" marks open inquiries with no call or email yet. Time in status shows a warning at 7 days and turns red as stalled at 14.
 - **Forms validate on blur, then live while you fix.** Messages say what to do ("Add a phone number or email so the team can follow up"), and a summary on submit links to each field.
-- **Every screen has designed loading, empty and error states**, reachable through the demo controls.
-- **Own design tokens.** Tailwind's default palette is removed, so only our tokens exist. Bricolage Grotesque for headings, Figtree for UI, JetBrains Mono for IDs.
+- **Every screen has its own loading, empty and error states**, reachable through the demo controls.
+- **Own design tokens.** Tailwind's default palette is removed, so only the project's tokens exist. Bricolage Grotesque for headings, Figtree for UI, JetBrains Mono for IDs.
 
 ## One tradeoff and what I'd improve
 
@@ -62,6 +62,6 @@ src/lib/                small helpers (cx, dates)
 - A throwaway vanilla-JS prototype set the look, spacing and copy before any app code. _(Say how it was made.)_
 - A PRD and ten core issues (plus four optional ones), each with acceptance criteria, were written before building.
 - Claude Code built each issue in its own session, following the rules in `CLAUDE.md`.
-- Each issue ended with a review of the diff against its starting commit. Fixes are separate `fix(...): address review…` commits.
+- Each issue ended with a review of its diff against the starting commit. Fixes landed as their own `fix(...)` commits.
 - Every diff was read before committing. Typecheck, lint, 30 unit tests and 2 e2e specs ran before each commit, plus manual checks at desktop width and 390px.
 - Decisions are recorded in `docs/DECISIONS.md` and `docs/adr/`.
