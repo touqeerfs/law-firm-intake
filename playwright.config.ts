@@ -1,7 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Its own port, so a dev server already running on 3000 is never mistaken for this app
-const baseURL = 'http://localhost:3100';
+const port = 3100;
+const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: './e2e',
@@ -15,7 +16,7 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run build && npm run start -- --port 3100',
+    command: `npm run build && npm run start -- --port ${port}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
