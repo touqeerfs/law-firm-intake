@@ -5,6 +5,7 @@ import { timeInStatus } from '../contact-rules';
 
 type StatusStepperProps = {
   contact: Contact;
+  onMove: (to: Status) => void;
 };
 
 const dotClasses: Record<Status, string> = {
@@ -13,7 +14,7 @@ const dotClasses: Record<Status, string> = {
   closed: 'bg-closed ring-closed/25',
 };
 
-export function StatusStepper({ contact }: StatusStepperProps) {
+export function StatusStepper({ contact, onMove }: StatusStepperProps) {
   const statuses = statusSchema.options;
   const currentIndex = statuses.indexOf(contact.status);
   const { days } = timeInStatus(contact);
@@ -27,17 +28,15 @@ export function StatusStepper({ contact }: StatusStepperProps) {
         const isDone = index < currentIndex;
         const isCurrent = index === currentIndex;
 
-        return (
-          <li
-            key={status}
-            aria-current={isCurrent ? 'step' : undefined}
-            className={cx(
-              'flex h-8.5 items-center justify-center gap-1.75 rounded-sm',
-              isCurrent && 'bg-surface text-text shadow-sm',
-              isDone && 'text-text-2',
-              !isCurrent && !isDone && 'text-muted',
-            )}
-          >
+        const classes = cx(
+          'flex h-8.5 w-full items-center justify-center gap-1.75 rounded-sm transition-colors',
+          isCurrent && 'bg-surface text-text shadow-sm',
+          isDone && 'text-text-2',
+          !isCurrent && !isDone && 'text-muted',
+          !isCurrent && 'cursor-pointer hover:bg-surface/60 hover:text-text',
+        );
+        const content = (
+          <>
             {isDone ? (
               <Check className="size-3.25" aria-hidden />
             ) : (
@@ -52,6 +51,23 @@ export function StatusStepper({ contact }: StatusStepperProps) {
             {statusDetails[status].label}
             {isCurrent && (
               <span className="font-medium text-muted">· {days === 0 ? 'today' : `${days}d`}</span>
+            )}
+          </>
+        );
+
+        return (
+          <li key={status} aria-current={isCurrent ? 'step' : undefined}>
+            {isCurrent ? (
+              <span className={classes}>{content}</span>
+            ) : (
+              <button
+                type="button"
+                aria-label={`Move to ${statusDetails[status].label}`}
+                onClick={() => onMove(status)}
+                className={classes}
+              >
+                {content}
+              </button>
             )}
           </li>
         );

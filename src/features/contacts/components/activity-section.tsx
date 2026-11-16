@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { toast } from 'sonner';
+import { firstName } from '@/lib/text';
 import { COORDINATOR, type Activity, type ActivityEntry, type Contact } from '../contact-model';
 import { useContactMutations } from '../use-contact-mutations';
 import { ActivityComposer, composerTypes } from './activity-composer';
@@ -14,14 +15,15 @@ type ActivitySectionProps = {
 export function ActivitySection({ contact, activities }: ActivitySectionProps) {
   const { addActivity } = useContactMutations();
   const headingId = useId();
-  const firstName = contact.name.split(' ')[0] ?? contact.name;
 
   function save(entry: ActivityEntry) {
     addActivity.mutate(
       { contactId: contact.id, ...entry },
       {
         onSuccess: () =>
-          toast.success(`${composerTypes[entry.type].label} saved to ${firstName}'s timeline`),
+          toast.success(
+            `${composerTypes[entry.type].label} saved to ${firstName(contact.name)}'s timeline`,
+          ),
       },
     );
   }

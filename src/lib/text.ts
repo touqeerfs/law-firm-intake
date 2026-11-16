@@ -5,3 +5,7 @@ export function normalizeText(text: string): string {
 export function digitsOnly(text: string): string {
   return text.replace(/\D/g, '');
 }
+
+export function firstName(name: string): string {
+  return name.trim().split(/\s+/)[0] ?? name;
+}

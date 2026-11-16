@@ -37,6 +37,9 @@ export function Providers({ children }: ProvidersProps) {
             toast:
               'flex w-full items-center gap-3 rounded-md bg-text py-2.5 pr-2.5 pl-3.5 text-md text-canvas shadow-lg',
             icon: 'grid size-5.5 shrink-0 place-items-center rounded-full bg-canvas/12',
+            content: 'flex-1',
+            actionButton:
+              'shrink-0 cursor-pointer rounded-sm bg-canvas/10 px-2.25 py-1.25 font-semibold text-canvas hover:bg-canvas/16',
           },
         }}
       />

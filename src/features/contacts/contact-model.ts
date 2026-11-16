@@ -193,6 +193,11 @@ export const activitySchema = z.object({
 });
 export type Activity = z.infer<typeof activitySchema>;
 
+export type ContactDetail = {
+  contact: Contact;
+  activities: Activity[];
+};
+
 export type ActivityEntry = {
   type: Extract<ActivityType, 'note' | 'call' | 'email'>;
   body: string;

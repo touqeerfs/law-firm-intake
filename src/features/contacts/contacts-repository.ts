@@ -5,6 +5,7 @@ import {
   type Activity,
   type ActivityEntry,
   type Contact,
+  type ContactDetail,
   type ContactInput,
   type StatusMove,
   type Store,
@@ -123,7 +124,7 @@ export function createContactsRepository({
       return readStore().contacts;
     },
 
-    async getContact(id: string): Promise<{ contact: Contact; activities: Activity[] }> {
+    async getContact(id: string): Promise<ContactDetail> {
       await simulateNetwork();
       const store = readStore();
       const contact = findContact(store, id);

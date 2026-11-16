@@ -7,7 +7,9 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { RepositoryError } from '../repository-error';
 import { useContact } from '../use-contacts';
 import { useDemoControls } from '../use-demo-controls';
+import { useStatusMove } from '../use-status-move';
 import { ActivitySection } from './activity-section';
+import { CloseReasonDialog } from './close-reason-dialog';
 import { ContactBanners } from './contact-banners';
 import { ContactDetailsCard } from './contact-details-card';
 import { ContactHeader } from './contact-header';
@@ -40,6 +42,7 @@ function ContactNotFound({ id }: ContactRecordProps) {
 export function ContactRecord({ id }: ContactRecordProps) {
   const { data, error, isPending, isError, isFetching, refetch } = useContact(id);
   const { changeData } = useDemoControls();
+  const { requestMove, closing, confirmClose, cancelClose } = useStatusMove();
 
   if (isPending) return <ContactRecordSkeleton />;
 
@@ -63,7 +66,7 @@ export function ContactRecord({ id }: ContactRecordProps) {
   return (
     <>
       <ContactHeader contact={contact} />
-      <StatusStepper contact={contact} />
+      <StatusStepper contact={contact} onMove={(to) => requestMove(contact, to)} />
       <ContactBanners contact={contact} />
       <div className="flex flex-col gap-4.5 wide:flex-row wide:items-start">
         <div className="flex flex-col gap-3.5 wide:w-95 wide:shrink-0">
@@ -72,6 +75,9 @@ export function ContactRecord({ id }: ContactRecordProps) {
         </div>
         <ActivitySection contact={contact} activities={activities} />
       </div>
+      {closing && (
+        <CloseReasonDialog contact={closing} onConfirm={confirmClose} onCancel={cancelClose} />
+      )}
     </>
   );
 }
