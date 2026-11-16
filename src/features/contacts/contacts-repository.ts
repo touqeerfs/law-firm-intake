@@ -5,6 +5,7 @@ import {
   type Activity,
   type ActivityEntry,
   type Contact,
+  type ContactInput,
   type StatusMove,
   type Store,
 } from './contact-model';
@@ -29,6 +30,31 @@ export type MoveUndo = {
 };
 
 const STORAGE_KEY = 'intake-desk/data';
+
+const editTrackedFields = [
+  'name',
+  'email',
+  'phone',
+  'preferredChannel',
+  'matterType',
+  'summary',
+  'source',
+  'referredBy',
+  'attorneyId',
+  'followUpAt',
+  'conflictCheck',
+] as const satisfies ReadonlyArray<keyof ContactInput>;
+
+type ActivityDetails = Omit<Activity, 'id' | 'contactId' | 'at' | 'actor'>;
+
+function createActivity(contactId: string, at: string, details: ActivityDetails): Activity {
+  return { id: `act_${crypto.randomUUID()}`, contactId, at, actor: COORDINATOR, ...details };
+}
+
+function nextContactId(contacts: Contact[]): string {
+  const numbers = contacts.map((contact) => Number(contact.id.replace('INT-', '')) || 0);
+  return `INT-${Math.max(1040, ...numbers) + 1}`;
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -161,6 +187,63 @@ export function createContactsRepository({
       write((store) => {
         Object.assign(findContact(store, undo.contactId), undo.previous);
         store.activities = store.activities.filter((activity) => activity.id !== undo.activityId);
+      });
+    },
+
+    async createContact(input: ContactInput): Promise<Contact> {
+      await simulateNetwork();
+      return write((store) => {
+        const now = new Date().toISOString();
+        const contact: Contact = {
+          ...input,
+          id: nextContactId(store.contacts),
+          createdAt: now,
+          statusChangedAt: now,
+          lastContactedAt: null,
+        };
+        store.contacts.push(contact);
+        store.activities.push(createActivity(contact.id, now, { type: 'created', body: null }));
+        if (contact.status !== 'lead') {
+          store.activities.push(
+            createActivity(contact.id, now, {
+              type: 'status_change',
+              body: null,
+              from: 'lead',
+              to: contact.status,
+              closeReason: contact.closeReason,
+            }),
+          );
+        }
+        return contact;
+      });
+    },
+
+    async updateContact(id: string, input: ContactInput): Promise<Contact> {
+      await simulateNetwork();
+      return write((store) => {
+        const contact = findContact(store, id);
+        const now = new Date().toISOString();
+        const changedFields = editTrackedFields.filter((field) => contact[field] !== input[field]);
+
+        if (contact.status !== input.status) {
+          store.activities.push(
+            createActivity(id, now, {
+              type: 'status_change',
+              body: null,
+              from: contact.status,
+              to: input.status,
+              closeReason: input.closeReason,
+            }),
+          );
+          contact.statusChangedAt = now;
+        }
+        if (changedFields.length > 0) {
+          store.activities.push(
+            createActivity(id, now, { type: 'edit', body: null, changedFields }),
+          );
+        }
+        Object.assign(contact, input);
+        return contact;
       });
     },
 
