@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import type { Contact } from '../contact-model';
 import { isDue } from '../contact-rules';
 import { useContacts } from '../use-contacts';
+import { useDemoControls } from '../use-demo-controls';
 import { ContactCards } from './contact-cards';
 import { ContactsListSkeleton } from './contacts-list-skeleton';
 import { ContactsLoadError } from './contacts-load-error';
@@ -57,6 +58,7 @@ function NoContacts() {
 
 export function ContactsList() {
   const { data: contacts, error, isPending, isError, isFetching, refetch } = useContacts();
+  const { changeData } = useDemoControls();
 
   return (
     <>
@@ -76,7 +78,12 @@ export function ContactsList() {
         {isPending ? (
           <ContactsListSkeleton />
         ) : isError ? (
-          <ContactsLoadError error={error} isRetrying={isFetching} onRetry={() => refetch()} />
+          <ContactsLoadError
+            error={error}
+            isRetrying={isFetching}
+            onRetry={() => refetch()}
+            onReset={() => changeData('sample')}
+          />
         ) : contacts.length === 0 ? (
           <NoContacts />
         ) : (

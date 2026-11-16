@@ -2,16 +2,15 @@ import { CircleAlert, RefreshCw, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import { RepositoryError } from '../repository-error';
-import { useDemoControls } from '../use-demo-controls';
 
 type ContactsLoadErrorProps = {
   error: Error;
   isRetrying: boolean;
   onRetry: () => void;
+  onReset: () => void;
 };
 
-export function ContactsLoadError({ error, isRetrying, onRetry }: ContactsLoadErrorProps) {
-  const { changeData } = useDemoControls();
+export function ContactsLoadError({ error, isRetrying, onRetry, onReset }: ContactsLoadErrorProps) {
   const code = error instanceof RepositoryError ? error.code : null;
 
   if (code === 'corrupt') {
@@ -20,7 +19,7 @@ export function ContactsLoadError({ error, isRetrying, onRetry }: ContactsLoadEr
         icon={CircleAlert}
         title="We couldn't read the data saved in this browser."
         action={
-          <Button size="sm" onClick={() => changeData('sample')}>
+          <Button size="sm" onClick={onReset}>
             Reset sample data
           </Button>
         }

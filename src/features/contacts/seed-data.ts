@@ -560,8 +560,7 @@ export function buildSeed(now: Date): Store {
       const base = { id: `act_${id}_${eventIndex}`, contactId: id, at, actor: COORDINATOR };
 
       if (event.type === 'created') {
-        const actor = seed.source === 'Website form' ? 'Web intake' : COORDINATOR;
-        activities.push({ ...base, actor, type: 'created', body: null });
+        activities.push({ ...base, actor: 'Web intake', type: 'created', body: null });
         createdAt = at;
         statusChangedAt = at;
       } else if (event.type === 'status_change') {

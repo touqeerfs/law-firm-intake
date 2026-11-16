@@ -13,7 +13,7 @@ import {
   NotContactedTag,
   RelativeTime,
   TimeInStatus,
-} from './contact-cells';
+} from './contact-fields';
 
 type ContactsTableProps = {
   contacts: Contact[];

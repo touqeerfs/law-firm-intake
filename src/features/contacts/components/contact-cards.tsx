@@ -8,7 +8,7 @@ import {
   FollowUpTag,
   NotContactedTag,
   TimeInStatus,
-} from './contact-cells';
+} from './contact-fields';
 
 type ContactCardsProps = {
   contacts: Contact[];

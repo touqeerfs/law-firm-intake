@@ -1,4 +1,4 @@
-import { calendarDaysBetween, formatShortDate, formatWeekday } from '@/lib/dates';
+import { calendarDaysBetween, DAY_MS, formatShortDate, formatWeekday } from '@/lib/dates';
 import type { Contact } from './contact-model';
 
 export const STATUS_WARNING_DAYS = 7;
@@ -27,7 +27,7 @@ export function isNotContacted(contact: Contact): boolean {
 }
 
 export function timeInStatus(contact: Contact): { days: number; tone: TimeInStatusTone } {
-  const days = calendarDaysBetween(new Date(contact.statusChangedAt), new Date());
+  const days = Math.floor((Date.now() - Date.parse(contact.statusChangedAt)) / DAY_MS);
   if (contact.status === 'closed') return { days, tone: 'neutral' };
   if (days >= STATUS_STALLED_DAYS) return { days, tone: 'danger' };
   if (days >= STATUS_WARNING_DAYS) return { days, tone: 'warn' };

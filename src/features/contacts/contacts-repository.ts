@@ -38,12 +38,16 @@ export function createContactsRepository({
     if (mode === 'failing') throw new RepositoryError('network');
   }
 
-  function saveStore(store: Store): void {
+  function persist(raw: string): void {
     try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(store));
+      storage.setItem(STORAGE_KEY, raw);
     } catch {
       throw new RepositoryError('storage');
     }
+  }
+
+  function saveStore(store: Store): void {
+    persist(JSON.stringify(store));
   }
 
   function readStore(): Store {
@@ -84,7 +88,7 @@ export function createContactsRepository({
     },
 
     async corruptData(): Promise<void> {
-      storage.setItem(STORAGE_KEY, '{"contacts": broken');
+      persist('{"contacts": broken');
     },
   };
 }
