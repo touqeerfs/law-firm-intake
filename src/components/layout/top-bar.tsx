@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react';
 import { buttonClasses } from '@/components/ui/button';
 import { Breadcrumb } from './breadcrumb';
 import { DemoControls } from './demo-controls';
+import { MobileSearchButton } from './palette-buttons';
 import { WorkspaceMark } from './workspace-mark';
 
 export function TopBar() {
@@ -17,6 +18,7 @@ export function TopBar() {
 
       <div className="ml-auto flex items-center gap-1.5">
         <DemoControls />
+        <MobileSearchButton />
         <Link href="/contacts/new" className={buttonClasses({ variant: 'primary', size: 'sm' })}>
           <Plus className="size-3.75" aria-hidden />
           <span className="hidden desktop:inline">Log inquiry</span>
