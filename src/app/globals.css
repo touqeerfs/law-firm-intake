@@ -36,7 +36,7 @@
   --color-lost-fg: #a8323a;
   --color-lost-bg: #fde8e8;
   --color-danger: #d92d20;
-  --color-danger-hover: color-mix(in srgb, var(--color-danger) 85%, #000000);
+  --color-danger-hover: #b42318;
   --color-danger-fg: #b42318;
   --color-danger-bg: #feedec;
   --color-warn: #f79009;
