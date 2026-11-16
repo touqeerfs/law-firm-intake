@@ -111,6 +111,7 @@
   --breakpoint-xwide: 1320px;
 
   --container-page: 92.5rem;
+  --container-narrow: 57.5rem;
 }
 
 @theme static {
@@ -136,6 +137,10 @@
 
 @utility no-scrollbar {
   scrollbar-width: none;
+}
+
+@utility bottom-above-tab-bar {
+  bottom: calc(--spacing(16.5) + env(safe-area-inset-bottom));
 }
 
 @utility pb-safe {

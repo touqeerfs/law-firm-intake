@@ -1,6 +1,7 @@
 import { useId, useRef, useState, type KeyboardEvent } from 'react';
 import { Mail, PenLine, Phone, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Kbd } from '@/components/ui/kbd';
 import type { ActivityEntry } from '../contact-model';
 
 type EntryType = ActivityEntry['type'];
@@ -36,9 +37,6 @@ export const composerTypes: Record<
 };
 
 const entryTypes: EntryType[] = ['note', 'call', 'email'];
-
-const kbdClasses =
-  'inline-grid h-4.5 min-w-4.5 place-items-center rounded-xs border border-b-2 border-border bg-surface-2 px-1 text-2xs text-muted';
 
 export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
   const [type, setType] = useState<EntryType>('note');
@@ -130,8 +128,8 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
           </p>
         ) : (
           <p className="flex items-center gap-1 text-xs text-faint">
-            <kbd className={kbdClasses}>⌘</kbd>
-            <kbd className={kbdClasses}>↵</kbd>
+            <Kbd>⌘</Kbd>
+            <Kbd>↵</Kbd>
             to save
           </p>
         )}
