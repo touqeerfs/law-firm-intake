@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import { useDroppable } from '@dnd-kit/core';
-import { Inbox, WifiOff } from 'lucide-react';
+import { Filter, Inbox, WifiOff } from 'lucide-react';
 import type { Contact, Status } from '@/features/contacts/contact-model';
 import { cx } from '@/lib/cx';
 import { landingIndex } from '../board-order';
@@ -15,6 +15,7 @@ type BoardColumnProps = {
   contacts: Contact[];
   state: BoardState;
   isCurrent: boolean;
+  isFiltered: boolean;
   movingId: string | null;
   landedId: string | null;
   highlightedId: string | null;
@@ -41,6 +42,7 @@ export function BoardColumn({
   contacts,
   state,
   isCurrent,
+  isFiltered,
   movingId,
   landedId,
   highlightedId,
@@ -92,6 +94,11 @@ export function BoardColumn({
       ) : state === 'error' ? (
         <ColumnPlaceholder icon={WifiOff}>
           Cards will appear once the pipeline loads.
+        </ColumnPlaceholder>
+      ) : contacts.length === 0 && slotIndex === null && isFiltered ? (
+        <ColumnPlaceholder icon={Filter}>
+          <strong className="mb-0.5 block font-semibold text-text-2">No matches here</strong>
+          Nothing in this stage matches the current filter.
         </ColumnPlaceholder>
       ) : contacts.length === 0 && slotIndex === null ? (
         <ColumnPlaceholder icon={Inbox}>

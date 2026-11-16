@@ -1,43 +1,43 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { PageHeader } from '@/components/layout/page-header';
 import { CloseReasonDialog } from '@/features/contacts/components/close-reason-dialog';
 import { ContactsLoadError } from '@/features/contacts/components/contacts-load-error';
 import { QuickLookDrawer } from '@/features/contacts/components/quick-look-drawer';
-import { statusSchema, type Contact, type Status } from '@/features/contacts/contact-model';
+import { statusSchema, type Status } from '@/features/contacts/contact-model';
+import { listViews } from '@/features/contacts/contact-rules';
 import { useContacts } from '@/features/contacts/use-contacts';
 import { useDemoControls } from '@/features/contacts/use-demo-controls';
 import { useStatusMove } from '@/features/contacts/use-status-move';
+import { boardFocusSchema, type BoardFocus } from '../board-focus';
 import { boardColumns } from '../board-order';
 import { useBoardDrag } from '../use-board-drag';
 import { BoardColumn, type BoardState } from './board-column';
+import { BoardSummary } from './board-summary';
 import { BoardTabs } from './board-tabs';
 import { CardOverlay } from './card-face';
+import { FocusChip } from './focus-chip';
+import { InsightsStrip } from './insights-strip';
 
-type BoardSummaryProps = {
-  contacts: Contact[];
+type BoardProps = {
+  focus: BoardFocus | null;
 };
 
-function BoardSummary({ contacts }: BoardSummaryProps) {
-  const open = contacts.filter((contact) => contact.status !== 'closed').length;
-  return (
-    <>
-      <span aria-hidden className="size-1.75 rounded-full bg-won ring-3 ring-won/22" />
-      {contacts.length} {contacts.length === 1 ? 'inquiry' : 'inquiries'} · {open} open
-    </>
-  );
-}
-
-export function PipelineBoard() {
+function Board({ focus }: BoardProps) {
+  const router = useRouter();
   const { data: contacts, error, isPending, isFetching, refetch } = useContacts();
   const { changeData } = useDemoControls();
   const { requestMove, closing, confirmClose, cancelClose, movingId, lastMovedId } =
     useStatusMove();
   const [mobileStatus, setMobileStatus] = useState<Status>('lead');
   const [quickLookId, setQuickLookId] = useState<string | null>(null);
-  const columns = useMemo(() => boardColumns(contacts ?? []), [contacts]);
+  const columns = useMemo(() => {
+    const all = contacts ?? [];
+    return boardColumns(focus ? all.filter(listViews[focus].matches) : all);
+  }, [contacts, focus]);
   const boardOrder = statusSchema.options.flatMap((status) =>
     columns[status].map((contact) => contact.id),
   );
@@ -45,6 +45,10 @@ export function PipelineBoard() {
 
   // A failed refetch keeps the last good list, so only a first load without data shows the error
   const state: BoardState = isPending ? 'loading' : contacts ? 'ready' : 'error';
+
+  function changeFocus(next: BoardFocus | null) {
+    router.replace(next ? `/pipeline?focus=${next}` : '/pipeline', { scroll: false });
+  }
 
   return (
     <>
@@ -70,6 +74,16 @@ export function PipelineBoard() {
             onRetry={() => refetch()}
             onReset={() => changeData('sample')}
           />
+        </div>
+      )}
+
+      {state !== 'error' && (
+        <InsightsStrip contacts={contacts} focus={focus} onFocusChange={changeFocus} />
+      )}
+
+      {focus && (
+        <div className="mb-3">
+          <FocusChip focus={focus} onClear={() => changeFocus(null)} />
         </div>
       )}
 
@@ -99,6 +113,7 @@ export function PipelineBoard() {
               contacts={columns[status]}
               state={state}
               isCurrent={status === mobileStatus}
+              isFiltered={focus !== null}
               movingId={movingId}
               landedId={lastMovedId}
               highlightedId={lastMovedId === droppedId ? lastMovedId : null}
@@ -127,5 +142,18 @@ export function PipelineBoard() {
         />
       )}
     </>
+  );
+}
+
+function FocusedBoard() {
+  const focus = boardFocusSchema.nullable().catch(null).parse(useSearchParams().get('focus'));
+  return <Board focus={focus} />;
+}
+
+export function PipelineBoard() {
+  return (
+    <Suspense fallback={<Board focus={null} />}>
+      <FocusedBoard />
+    </Suspense>
   );
 }
