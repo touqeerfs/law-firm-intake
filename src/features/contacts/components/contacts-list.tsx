@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { Inbox, Plus } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
@@ -9,10 +10,9 @@ import type { Contact } from '../contact-model';
 import { isDue } from '../contact-rules';
 import { useContacts } from '../use-contacts';
 import { useDemoControls } from '../use-demo-controls';
-import { ContactCards } from './contact-cards';
 import { ContactsListSkeleton } from './contacts-list-skeleton';
 import { ContactsLoadError } from './contacts-load-error';
-import { ContactsTable } from './contacts-table';
+import { FilteredContacts } from './filtered-contacts';
 
 type ListSummaryProps = {
   contacts: Contact[];
@@ -87,10 +87,9 @@ export function ContactsList() {
         ) : contacts.length === 0 ? (
           <NoContacts />
         ) : (
-          <>
-            <ContactsTable contacts={contacts} />
-            <ContactCards contacts={contacts} />
-          </>
+          <Suspense fallback={<ContactsListSkeleton />}>
+            <FilteredContacts contacts={contacts} />
+          </Suspense>
         )}
       </div>
     </>

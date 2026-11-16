@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Avatar } from '@/components/ui/avatar';
+import { Highlight } from '@/components/ui/highlight';
 import { attorneys, type Contact } from '../contact-model';
 import { isNotContacted } from '../contact-rules';
 import {
@@ -12,9 +13,10 @@ import {
 
 type ContactCardsProps = {
   contacts: Contact[];
+  query: string;
 };
 
-export function ContactCards({ contacts }: ContactCardsProps) {
+export function ContactCards({ contacts, query }: ContactCardsProps) {
   return (
     <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface wide:hidden">
       {contacts.map((contact) => (
@@ -24,7 +26,9 @@ export function ContactCards({ contacts }: ContactCardsProps) {
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
                 <span className="flex min-w-0 items-center gap-1.5">
-                  <span className="truncate font-semibold">{contact.name}</span>
+                  <span className="truncate font-semibold">
+                    <Highlight text={contact.name} query={query} />
+                  </span>
                   {contact.conflictCheck === 'flagged' && <ConflictFlag />}
                 </span>
                 <ContactStatusPill contact={contact} />

@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
+import { Highlight } from '@/components/ui/highlight';
 import { cx } from '@/lib/cx';
 import type { Contact } from '../contact-model';
-import { isNotContacted } from '../contact-rules';
+import { isNotContacted, type ContactSort } from '../contact-rules';
 import {
   AttorneyName,
   ConflictFlag,
@@ -14,13 +15,18 @@ import {
   RelativeTime,
   TimeInStatus,
 } from './contact-fields';
+import { SortableHeader } from './sortable-header';
 
 type ContactsTableProps = {
   contacts: Contact[];
+  query: string;
+  sort: ContactSort;
+  onSortChange: (sort: ContactSort) => void;
 };
 
 type ContactRowProps = {
   contact: Contact;
+  query: string;
 };
 
 const headClasses =
@@ -28,7 +34,7 @@ const headClasses =
 const cellClasses = 'h-14.5 truncate border-b border-border px-3.5 group-last:border-b-0';
 const xwideOnly = 'hidden xwide:table-cell';
 
-function ContactRow({ contact }: ContactRowProps) {
+function ContactRow({ contact, query }: ContactRowProps) {
   return (
     <tr className="group relative transition-colors hover:bg-surface-2">
       <td className={cellClasses}>
@@ -40,12 +46,13 @@ function ContactRow({ contact }: ContactRowProps) {
                 href={`/contacts/${contact.id}`}
                 className="truncate font-semibold after:absolute after:inset-0"
               >
-                {contact.name}
+                <Highlight text={contact.name} query={query} />
               </Link>
               {contact.conflictCheck === 'flagged' && <ConflictFlag />}
             </div>
             <span className="block truncate text-xs text-muted">
-              {contact.id} · {contact.email || contact.phone}
+              <Highlight text={contact.id} query={query} /> ·{' '}
+              {contact.email ? <Highlight text={contact.email} query={query} /> : contact.phone}
             </span>
           </div>
         </div>
@@ -79,18 +86,42 @@ function ContactRow({ contact }: ContactRowProps) {
   );
 }
 
-export function ContactsTable({ contacts }: ContactsTableProps) {
+export function ContactsTable({ contacts, query, sort, onSortChange }: ContactsTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border bg-surface shadow-xs wide:block">
       <table className="w-full table-fixed border-separate border-spacing-0">
         <thead>
           <tr>
-            <th className={headClasses}>Name</th>
+            <SortableHeader
+              sort="name"
+              direction="ascending"
+              currentSort={sort}
+              onSortChange={onSortChange}
+              className={headClasses}
+            >
+              Name
+            </SortableHeader>
             <th className={cx(headClasses, 'w-28')}>Status</th>
             <th className={cx(headClasses, 'w-36')}>Matter</th>
             <th className={cx(headClasses, xwideOnly, 'w-36')}>Attorney</th>
-            <th className={cx(headClasses, 'w-32')}>Follow-up</th>
-            <th className={cx(headClasses, 'w-32')}>Last contact</th>
+            <SortableHeader
+              sort="follow-up"
+              direction="ascending"
+              currentSort={sort}
+              onSortChange={onSortChange}
+              className={cx(headClasses, 'w-32')}
+            >
+              Follow-up
+            </SortableHeader>
+            <SortableHeader
+              sort="last-contacted"
+              direction="descending"
+              currentSort={sort}
+              onSortChange={onSortChange}
+              className={cx(headClasses, 'w-32')}
+            >
+              Last contact
+            </SortableHeader>
             <th className={cx(headClasses, xwideOnly, 'w-28')}>Time in status</th>
             <th className={cx(headClasses, 'w-12')}>
               <span className="sr-only">Open</span>
@@ -99,7 +130,7 @@ export function ContactsTable({ contacts }: ContactsTableProps) {
         </thead>
         <tbody>
           {contacts.map((contact) => (
-            <ContactRow key={contact.id} contact={contact} />
+            <ContactRow key={contact.id} contact={contact} query={query} />
           ))}
         </tbody>
       </table>
