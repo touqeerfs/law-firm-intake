@@ -5,6 +5,7 @@ import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { PageHeader } from '@/components/layout/page-header';
 import { CloseReasonDialog } from '@/features/contacts/components/close-reason-dialog';
 import { ContactsLoadError } from '@/features/contacts/components/contacts-load-error';
+import { QuickLookDrawer } from '@/features/contacts/components/quick-look-drawer';
 import { statusSchema, type Contact, type Status } from '@/features/contacts/contact-model';
 import { useContacts } from '@/features/contacts/use-contacts';
 import { useDemoControls } from '@/features/contacts/use-demo-controls';
@@ -35,7 +36,11 @@ export function PipelineBoard() {
   const { requestMove, closing, confirmClose, cancelClose, movingId, lastMovedId } =
     useStatusMove();
   const [mobileStatus, setMobileStatus] = useState<Status>('lead');
+  const [quickLookId, setQuickLookId] = useState<string | null>(null);
   const columns = useMemo(() => boardColumns(contacts ?? []), [contacts]);
+  const boardOrder = statusSchema.options.flatMap((status) =>
+    columns[status].map((contact) => contact.id),
+  );
   const { dragged, droppedId, contextProps } = useBoardDrag(contacts ?? [], requestMove);
 
   // A failed refetch keeps the last good list, so only a first load without data shows the error
@@ -97,8 +102,10 @@ export function PipelineBoard() {
               movingId={movingId}
               landedId={lastMovedId}
               highlightedId={lastMovedId === droppedId ? lastMovedId : null}
+              selectedId={quickLookId}
               dragged={dragged}
               onMove={requestMove}
+              onOpen={setQuickLookId}
             />
           ))}
         </div>
@@ -109,6 +116,15 @@ export function PipelineBoard() {
 
       {closing && (
         <CloseReasonDialog contact={closing} onConfirm={confirmClose} onCancel={cancelClose} />
+      )}
+
+      {quickLookId && (
+        <QuickLookDrawer
+          contactId={quickLookId}
+          contactIds={boardOrder}
+          onShow={setQuickLookId}
+          onClose={() => setQuickLookId(null)}
+        />
       )}
     </>
   );

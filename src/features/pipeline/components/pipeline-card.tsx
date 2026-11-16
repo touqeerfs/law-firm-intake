@@ -6,6 +6,7 @@ import { buttonClasses } from '@/components/ui/button';
 import type { Contact, Status } from '@/features/contacts/contact-model';
 import { phoneHref } from '@/features/contacts/contact-rules';
 import { cx } from '@/lib/cx';
+import { onPlainClick } from '@/lib/plain-click';
 import { CardFace, cardClasses, nameClasses } from './card-face';
 import { CardMenu } from './card-menu';
 
@@ -14,7 +15,9 @@ type PipelineCardProps = {
   isSaving: boolean;
   isLanded: boolean;
   isHighlighted: boolean;
+  isSelected: boolean;
   onMove: (contact: Contact, to: Status) => void;
+  onOpen: (contactId: string) => void;
 };
 
 const actionClasses = cx(
@@ -27,7 +30,9 @@ export function PipelineCard({
   isSaving,
   isLanded,
   isHighlighted,
+  isSelected,
   onMove,
+  onOpen,
 }: PipelineCardProps) {
   const { setNodeRef, setActivatorNodeRef, node, listeners, attributes, isDragging } = useDraggable(
     { id: contact.id },
@@ -52,6 +57,7 @@ export function PipelineCard({
         'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md',
         isDragging && 'scale-98 opacity-40',
         isHighlighted && 'motion-safe:animate-landed',
+        isSelected && 'ring-3 ring-accent/30',
       )}
     >
       {isSaving && (
@@ -67,6 +73,7 @@ export function PipelineCard({
               setActivatorNodeRef(link);
             }}
             href={`/contacts/${contact.id}`}
+            onClick={onPlainClick(() => onOpen(contact.id))}
             aria-describedby={attributes['aria-describedby']}
             className={cx(nameClasses, 'after:absolute after:inset-0 after:rounded-md')}
           >

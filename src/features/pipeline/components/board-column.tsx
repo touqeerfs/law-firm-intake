@@ -18,8 +18,10 @@ type BoardColumnProps = {
   movingId: string | null;
   landedId: string | null;
   highlightedId: string | null;
+  selectedId: string | null;
   dragged: Contact | null;
   onMove: (contact: Contact, to: Status) => void;
+  onOpen: (contactId: string) => void;
 };
 
 const tintClasses: Record<Status, string> = {
@@ -42,8 +44,10 @@ export function BoardColumn({
   movingId,
   landedId,
   highlightedId,
+  selectedId,
   dragged,
   onMove,
+  onOpen,
 }: BoardColumnProps) {
   const headingId = useId();
   const { setNodeRef, isOver } = useDroppable({ id: status });
@@ -59,7 +63,9 @@ export function BoardColumn({
         isSaving={contact.id === movingId}
         isLanded={contact.id === landedId}
         isHighlighted={contact.id === highlightedId}
+        isSelected={contact.id === selectedId}
         onMove={onMove}
+        onOpen={onOpen}
       />
     </li>
   ));
