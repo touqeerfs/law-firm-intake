@@ -13,7 +13,19 @@ Graded on: UX and visual judgement, code quality (structure, naming, reuse, type
 
 ## Commands
 
-Filled in by issue 01 once the project is scaffolded: `dev`, `build`, `start`, `lint`, `typecheck`, `format`, `test`, `test:watch`, `e2e`.
+| Command | What it does |
+|---|---|
+| `npm run dev` | Next dev server (Turbopack) on http://localhost:3000 |
+| `npm run build` | Production build (also type-checks routes) |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint, then `prettier --check .` |
+| `npm run typecheck` | `next typegen` (route types such as `PageProps`), then `tsc --noEmit` |
+| `npm run format` | `prettier --write .` |
+| `npm test` | Vitest once (`src/**/*.test.ts`, passes with no tests) |
+| `npm run test:watch` | Vitest in watch mode |
+| `npm run e2e` | Playwright, Chromium desktop; builds and starts the app itself. First run `npx playwright install chromium` |
+
+Before each commit: `npm run typecheck && npm run lint && npm test`.
 
 ## Architecture
 
