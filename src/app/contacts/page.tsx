@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { PageHeader } from '@/components/layout/page-header';
+import { ContactsList } from '@/features/contacts/components/contacts-list';
 
 export const metadata: Metadata = { title: 'Contacts' };
 
 export default function ContactsPage() {
-  return <PageHeader title="Contacts" />;
+  return <ContactsList />;
 }
