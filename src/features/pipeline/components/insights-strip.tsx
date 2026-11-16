@@ -2,7 +2,7 @@ import { Award, Clock, PhoneIncoming, Timer } from 'lucide-react';
 import type { Activity, Contact } from '@/features/contacts/contact-model';
 import { useActivities } from '@/features/contacts/use-contacts';
 import { formatDuration } from '@/lib/dates';
-import type { BoardFocus } from '../board-focus';
+import { focusLabels, type BoardFocus } from '../board-focus';
 import { boardMetrics, FIRST_RESPONSE_TARGET_MS } from '../board-metrics';
 import { OutcomeBar, TargetBar } from './insight-bars';
 import { InsightTile, InsightTileSkeleton } from './insight-tile';
@@ -28,7 +28,7 @@ function InsightTiles({ contacts, activities, focus, onFocusChange }: InsightTil
       <InsightTile
         icon={Clock}
         tone="warn"
-        label="Follow-ups due"
+        label={focusLabels.due}
         value={metrics.dueCount}
         note={metrics.overdueCount > 0 ? `${metrics.overdueCount} overdue` : undefined}
         noteTone="danger"
@@ -41,7 +41,7 @@ function InsightTiles({ contacts, activities, focus, onFocusChange }: InsightTil
       <InsightTile
         icon={PhoneIncoming}
         tone="accent"
-        label="Awaiting first contact"
+        label={focusLabels['not-contacted']}
         value={metrics.notContactedCount}
         note={metrics.notContactedCount > 0 ? 'call now' : 'all reached'}
         noteTone={metrics.notContactedCount > 0 ? 'warn' : 'ok'}

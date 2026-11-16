@@ -1,6 +1,5 @@
 import { Filter, X } from 'lucide-react';
-import { listViews } from '@/features/contacts/contact-rules';
-import type { BoardFocus } from '../board-focus';
+import { focusLabels, type BoardFocus } from '../board-focus';
 
 type FocusChipProps = {
   focus: BoardFocus;
@@ -16,7 +15,7 @@ export function FocusChip({ focus, onClear }: FocusChipProps) {
     >
       <Filter className="size-3.25" aria-hidden />
       <span className="sr-only">Clear filter: </span>
-      {listViews[focus].label}
+      {focusLabels[focus]}
       <X className="size-3.5" aria-hidden />
     </button>
   );
