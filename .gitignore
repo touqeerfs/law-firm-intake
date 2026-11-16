@@ -1,6 +1,7 @@
 # local planning and agent tooling (not part of the submission)
 .scratch/
 .claude/
+docs/agents/
 
 # dependencies
 /node_modules
