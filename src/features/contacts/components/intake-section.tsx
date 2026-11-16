@@ -14,17 +14,10 @@ import {
   conflictCheckSchema,
   statusDetails,
   statusSchema,
-  type Status,
 } from '../contact-model';
 import type { ContactFormInput } from '../contact-form-schema';
 import { useContactFormField } from '../use-contact-form-field';
-import { conflictCheckTags } from './contact-fields';
-
-const statusDotClasses: Record<Status, string> = {
-  lead: 'bg-lead',
-  active: 'bg-active',
-  closed: 'bg-closed',
-};
+import { conflictCheckTags, statusDotClasses } from './contact-fields';
 
 export function IntakeSection() {
   const {
