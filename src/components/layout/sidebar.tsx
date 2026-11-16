@@ -1,4 +1,4 @@
-import { NavLink } from './nav-link';
+import { SidebarNav } from './sidebar-nav';
 import { WorkspaceMark } from './workspace-mark';
 
 export function Sidebar() {
@@ -12,14 +12,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <nav aria-label="Primary" className="flex flex-col gap-px">
-        <NavLink item="pipeline" variant="sidebar" />
-        <NavLink item="contacts" variant="sidebar" />
-        <p className="px-2.5 pt-3.5 pb-1.5 text-2xs font-semibold tracking-wider text-faint uppercase">
-          Needs attention
-        </p>
-        <NavLink item="followUpsDue" variant="sidebar" />
-      </nav>
+      <SidebarNav />
 
       <div className="mt-auto flex items-center gap-2.5 p-2">
         <span
