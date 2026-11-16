@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { Button, buttonClasses } from '@/components/ui/button';
 import { Drawer } from '@/components/ui/drawer';
+import { isTypingIn } from '@/lib/is-typing-in';
 import { ContactRecord } from './contact-record';
 import { DiscardChangesDialog } from './discard-changes-dialog';
 
@@ -14,14 +15,6 @@ type QuickLookDrawerProps = {
   onShow: (contactId: string) => void;
   onClose: () => void;
 };
-
-function isTyping(target: EventTarget) {
-  return (
-    target instanceof HTMLInputElement ||
-    target instanceof HTMLTextAreaElement ||
-    target instanceof HTMLSelectElement
-  );
-}
 
 export function QuickLookDrawer({ contactId, contactIds, onShow, onClose }: QuickLookDrawerProps) {
   const [hasDraft, setHasDraft] = useState(false);
@@ -46,7 +39,7 @@ export function QuickLookDrawer({ contactId, contactIds, onShow, onClose }: Quic
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (!(event.target instanceof Node) || !event.currentTarget.contains(event.target)) return;
-    if (isTyping(event.target) || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (isTypingIn(event.target) || event.metaKey || event.ctrlKey || event.altKey) return;
     if (event.key === 'j') show(nextId);
     else if (event.key === 'k') show(previousId);
     else return;

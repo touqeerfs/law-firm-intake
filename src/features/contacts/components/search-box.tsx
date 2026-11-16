@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Search } from 'lucide-react';
+import { isTypingIn } from '@/lib/is-typing-in';
 
 type SearchBoxProps = {
   query: string;
@@ -9,13 +10,6 @@ type SearchBoxProps = {
 };
 
 const SEARCH_DELAY_MS = 120;
-
-function isTypingIn(target: EventTarget | null): boolean {
-  return (
-    target instanceof HTMLElement &&
-    (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
-  );
-}
 
 export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
