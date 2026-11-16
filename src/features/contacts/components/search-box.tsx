@@ -59,7 +59,7 @@ export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
   }
 
   return (
-    <label className="flex h-8.5 w-full min-w-0 items-center gap-2 rounded-sm border border-border bg-surface pr-2 pl-2.5 text-muted shadow-xs transition focus-within:border-accent focus-within:ring-3 focus-within:ring-accent/30 desktop:w-75">
+    <label className="flex h-11 w-full min-w-0 items-center gap-2 rounded-sm border border-border bg-surface pr-2 pl-2.5 text-muted shadow-xs transition focus-within:border-accent focus-within:ring-3 focus-within:ring-accent/30 desktop:h-8.5 desktop:w-75">
       <Search className="size-3.75 shrink-0" aria-hidden />
       <span className="sr-only">Search contacts</span>
       <input

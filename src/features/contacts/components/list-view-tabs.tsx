@@ -28,7 +28,7 @@ export function ListViewTabs({ tabs, currentView, onViewChange }: ListViewTabsPr
             type="button"
             aria-pressed={view === currentView}
             onClick={() => onViewChange(view)}
-            className="relative inline-flex h-9.5 shrink-0 items-center gap-1.75 px-2.5 font-semibold whitespace-nowrap text-muted transition-colors hover:text-text aria-pressed:text-text aria-pressed:after:absolute aria-pressed:after:inset-x-2 aria-pressed:after:-bottom-px aria-pressed:after:h-0.5 aria-pressed:after:rounded-full aria-pressed:after:bg-text"
+            className="relative inline-flex h-11 shrink-0 items-center gap-1.75 px-2.5 font-semibold whitespace-nowrap text-muted transition-colors hover:text-text aria-pressed:text-text aria-pressed:after:absolute aria-pressed:after:inset-x-2 aria-pressed:after:-bottom-px aria-pressed:after:h-0.5 aria-pressed:after:rounded-full aria-pressed:after:bg-text desktop:h-9.5"
           >
             {status && (
               <span

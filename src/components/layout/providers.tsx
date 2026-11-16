@@ -39,7 +39,7 @@ export function Providers({ children }: ProvidersProps) {
             icon: 'grid size-5.5 shrink-0 place-items-center rounded-full bg-canvas/12',
             content: 'flex-1',
             actionButton:
-              'shrink-0 cursor-pointer rounded-sm bg-canvas/10 px-2.25 py-1.25 font-semibold text-canvas hover:bg-canvas/16',
+              'min-h-11 shrink-0 cursor-pointer rounded-sm bg-canvas/10 px-2.25 py-1.25 font-semibold text-canvas hover:bg-canvas/16 desktop:min-h-0',
           },
         }}
       />

@@ -89,7 +89,7 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
                 onChange={() => setType(entryType)}
                 className="peer sr-only"
               />
-              <span className="flex h-7 cursor-pointer items-center gap-1.5 rounded-sm px-2.5 text-sm font-semibold text-muted transition-colors peer-checked:bg-surface-3 peer-checked:text-text peer-focus-visible:outline-3 peer-focus-visible:outline-accent/30 hover:text-text">
+              <span className="flex h-11 cursor-pointer items-center gap-1.5 rounded-sm px-2.5 text-sm font-semibold text-muted transition-colors peer-checked:bg-surface-3 peer-checked:text-text peer-focus-visible:outline-3 peer-focus-visible:outline-accent/30 hover:text-text desktop:h-7">
                 <Icon className="size-3.5" aria-hidden />
                 {label}
               </span>
@@ -127,13 +127,13 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
             Retry or discard the entry that didn&apos;t save.
           </p>
         ) : (
-          <p className="flex items-center gap-1 text-xs text-muted">
+          <p className="hidden items-center gap-1 text-xs text-muted desktop:flex">
             <Kbd>⌘</Kbd>
             <Kbd>↵</Kbd>
             to save
           </p>
         )}
-        <Button type="submit" variant="primary" size="sm" disabled={isBlocked}>
+        <Button type="submit" variant="primary" size="sm" disabled={isBlocked} className="ml-auto">
           {composerTypes[type].action}
         </Button>
       </div>

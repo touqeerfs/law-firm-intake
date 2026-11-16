@@ -8,7 +8,7 @@ import { WorkspaceMark } from './workspace-mark';
 export function TopBar() {
   return (
     <header className="sticky top-0 z-10 flex h-14 items-center gap-2.5 border-b border-border bg-canvas/86 pr-3 pl-4 backdrop-blur-md backdrop-saturate-140 desktop:top-2 desktop:h-13 desktop:rounded-t-xl desktop:pr-4 desktop:pl-5.5">
-      <Link href="/pipeline" className="flex items-center gap-2.5 desktop:hidden">
+      <Link href="/pipeline" className="flex h-11 items-center gap-2.5 desktop:hidden">
         <WorkspaceMark size="sm" />
         <span className="font-display font-semibold tracking-snug">Intake Desk</span>
       </Link>

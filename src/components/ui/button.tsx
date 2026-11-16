@@ -19,13 +19,13 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'h-7.5 px-2.5 text-sm',
-  md: 'h-8.5 px-3.25 text-md',
+  sm: 'h-11 px-2.5 text-sm desktop:h-7.5',
+  md: 'h-11 px-3.25 text-md desktop:h-8.5',
 };
 
 const iconOnlySizeClasses: Record<ButtonSize, string> = {
-  sm: 'size-6.5',
-  md: 'size-8',
+  sm: 'size-11 desktop:size-6.5',
+  md: 'size-11 desktop:size-8',
 };
 
 export function buttonClasses({

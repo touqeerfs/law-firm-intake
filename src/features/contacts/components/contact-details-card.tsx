@@ -21,7 +21,10 @@ type CopyableLinkProps = {
 function CopyableLink({ href, value, copyLabel }: CopyableLinkProps) {
   return (
     <span className="flex min-w-0 items-center gap-1">
-      <a href={href} className="min-w-0 text-accent-text underline-offset-3 hover:underline">
+      <a
+        href={href}
+        className="flex min-h-11 min-w-0 items-center text-accent-text underline-offset-3 hover:underline desktop:min-h-0"
+      >
         {value}
       </a>
       <CopyButton value={value} label={copyLabel} />

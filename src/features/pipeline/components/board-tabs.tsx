@@ -21,7 +21,7 @@ export function BoardTabs({ counts, currentStatus, onStatusChange }: BoardTabsPr
           type="button"
           aria-pressed={status === currentStatus}
           onClick={() => onStatusChange(status)}
-          className="inline-flex h-8.5 flex-1 items-center justify-center gap-1.5 rounded-sm text-sm font-semibold text-muted transition-colors hover:text-text aria-pressed:bg-surface aria-pressed:text-text aria-pressed:shadow-sm"
+          className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-sm text-sm font-semibold text-muted transition-colors hover:text-text aria-pressed:bg-surface aria-pressed:text-text aria-pressed:shadow-sm"
         >
           <span aria-hidden className={cx('size-1.75 rounded-full', statusDotClasses[status])} />
           {statusDetails[status].label}

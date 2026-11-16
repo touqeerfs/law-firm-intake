@@ -6,7 +6,7 @@ const inputClasses =
   'w-full rounded-sm border border-border-strong bg-surface px-3 shadow-xs transition-colors placeholder:text-muted hover:border-faint focus:border-accent focus:ring-3 focus:ring-accent/30 focus:outline-none aria-invalid:border-danger aria-invalid:focus:ring-danger/20';
 
 export function TextInput({ className, ...props }: ComponentProps<'input'>) {
-  return <input className={cx(inputClasses, 'h-9.5', className)} {...props} />;
+  return <input className={cx(inputClasses, 'h-11 desktop:h-9.5', className)} {...props} />;
 }
 
 export function TextArea({ className, ...props }: ComponentProps<'textarea'>) {
@@ -22,7 +22,11 @@ export function Select({ className, ...props }: ComponentProps<'select'>) {
   return (
     <div className="relative">
       <select
-        className={cx(inputClasses, 'h-9.5 cursor-pointer appearance-none pr-8', className)}
+        className={cx(
+          inputClasses,
+          'h-11 cursor-pointer appearance-none pr-8 desktop:h-9.5',
+          className,
+        )}
         {...props}
       />
       <ChevronDown

@@ -29,7 +29,7 @@ export function StatusStepper({ contact, onMove }: StatusStepperProps) {
         const isCurrent = index === currentIndex;
 
         const classes = cx(
-          'flex h-8.5 w-full items-center justify-center gap-1.75 rounded-sm transition-colors',
+          'flex h-11 w-full items-center justify-center gap-1.75 rounded-sm transition-colors desktop:h-8.5',
           isCurrent && 'bg-surface text-text shadow-sm',
           isDone && 'text-text-2',
           !isCurrent && !isDone && 'text-muted',

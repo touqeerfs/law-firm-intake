@@ -26,7 +26,7 @@ export function DemoControls() {
 
   return (
     <Popover.Root>
-      <Popover.Trigger className="inline-flex size-8 items-center justify-center gap-2 rounded-full border border-dashed border-border-strong text-sm font-semibold text-text-2 transition-colors hover:border-solid hover:bg-surface-2 hover:text-text aria-expanded:border-solid aria-expanded:bg-surface-2 aria-expanded:text-text desktop:h-7.5 desktop:w-auto desktop:px-2.75">
+      <Popover.Trigger className="inline-flex size-11 items-center justify-center gap-2 rounded-full border border-dashed border-border-strong text-sm font-semibold text-text-2 transition-colors hover:border-solid hover:bg-surface-2 hover:text-text aria-expanded:border-solid aria-expanded:bg-surface-2 aria-expanded:text-text desktop:h-7.5 desktop:w-auto desktop:px-2.75">
         <span aria-hidden className={cx('size-1.75 rounded-full', dotClasses[networkMode])} />
         <span className="sr-only desktop:not-sr-only">Demo controls</span>
       </Popover.Trigger>
@@ -58,7 +58,7 @@ export function DemoControls() {
                     onChange={() => changeNetworkMode(mode)}
                     className="peer sr-only"
                   />
-                  <span className="flex h-7 cursor-pointer items-center justify-center rounded-sm text-sm font-semibold text-muted transition-colors peer-checked:bg-surface peer-checked:text-text peer-checked:shadow-sm peer-focus-visible:outline-3 peer-focus-visible:outline-accent/30 hover:text-text">
+                  <span className="flex h-11 cursor-pointer items-center justify-center rounded-sm text-sm font-semibold text-muted transition-colors peer-checked:bg-surface peer-checked:text-text peer-checked:shadow-sm peer-focus-visible:outline-3 peer-focus-visible:outline-accent/30 hover:text-text desktop:h-7">
                     {label}
                   </span>
                 </label>
