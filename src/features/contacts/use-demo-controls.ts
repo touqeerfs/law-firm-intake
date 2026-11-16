@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getContactsRepository } from './browser-repository';
 import type { ResetMode } from './contacts-repository';
+import { contactKeys } from './query-keys';
 import {
   readNetworkMode,
   subscribeToNetworkMode,
@@ -38,7 +39,8 @@ export function useDemoControls() {
 
   function changeNetworkMode(mode: NetworkMode) {
     writeNetworkMode(mode);
-    void reloadAll();
+    // Only the list reloads, so an open record stays on screen and a reviewer can watch a save fail
+    void queryClient.resetQueries({ queryKey: contactKeys.list() });
   }
 
   return { networkMode, changeNetworkMode, changeData: dataMutation.mutate };
