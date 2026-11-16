@@ -123,3 +123,15 @@ export function sortContacts(contacts: Contact[], sort: ContactSort): Contact[] 
 export function phoneHref(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, '')}`;
 }
+
+export function findContactByEmail(
+  contacts: Contact[],
+  email: string,
+  exceptId: string | null,
+): Contact | undefined {
+  const target = normalizeText(email.trim());
+  if (target === '') return undefined;
+  return contacts.find(
+    (contact) => contact.id !== exceptId && normalizeText(contact.email) === target,
+  );
+}

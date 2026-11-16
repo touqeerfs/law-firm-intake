@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { PageHeader } from '@/components/layout/page-header';
+import { ContactForm } from '@/features/contacts/components/contact-form';
 
 export const metadata: Metadata = { title: 'New inquiry' };
 
-export default function NewContactPage() {
-  return <PageHeader title="Log a new inquiry" />;
+export default async function NewContactPage({ searchParams }: PageProps<'/contacts/new'>) {
+  const { name } = await searchParams;
+  return <ContactForm initialName={typeof name === 'string' ? name : ''} />;
 }

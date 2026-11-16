@@ -8,6 +8,7 @@ import {
   type ActivityEntry,
   type Contact,
   type ContactDetail,
+  type ContactInput,
   type StatusMove,
 } from './contact-model';
 import type { MoveUndo } from './contacts-repository';
@@ -20,6 +21,11 @@ type AddActivityVariables = ActivityEntry & {
 export type MoveVariables = {
   contact: Contact;
   move: StatusMove;
+};
+
+type UpdateContactVariables = {
+  id: string;
+  input: ContactInput;
 };
 
 const moveKey = [...contactKeys.all, 'move'] as const;
@@ -91,5 +97,16 @@ export function useContactMutations() {
     },
   });
 
-  return { addActivity, moveContact };
+  const createContact = useMutation({
+    mutationFn: (input: ContactInput) => getContactsRepository().createContact(input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: contactKeys.all }),
+  });
+
+  const updateContact = useMutation({
+    mutationFn: ({ id, input }: UpdateContactVariables) =>
+      getContactsRepository().updateContact(id, input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: contactKeys.all }),
+  });
+
+  return { addActivity, moveContact, createContact, updateContact };
 }
