@@ -9,6 +9,11 @@ const shortDateWithYear = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
 });
 const weekday = new Intl.DateTimeFormat('en-GB', { weekday: 'short' });
+const dayHeading = new Intl.DateTimeFormat('en-GB', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+});
 const time = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
 
 export function startOfDay(date: Date): Date {
@@ -34,6 +39,13 @@ export function formatWeekday(iso: string): string {
 
 export function formatTime(iso: string): string {
   return time.format(new Date(iso));
+}
+
+export function formatDayHeading(iso: string): string {
+  const days = calendarDaysBetween(new Date(iso), new Date());
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  return dayHeading.format(new Date(iso));
 }
 
 export function formatRelative(iso: string): string {

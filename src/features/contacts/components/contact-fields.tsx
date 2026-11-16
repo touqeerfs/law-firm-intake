@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
-import { Clock, Flag, User } from 'lucide-react';
+import { Clock, Flag, Shield, ShieldCheck, User, type LucideIcon } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Meter } from '@/components/ui/meter';
 import { Pill, type PillTone } from '@/components/ui/pill';
-import { Tag } from '@/components/ui/tag';
+import { Tag, type TagTone } from '@/components/ui/tag';
 import { cx } from '@/lib/cx';
 import { formatRelative, formatShortDate, formatTime } from '@/lib/dates';
 import {
@@ -11,8 +11,11 @@ import {
   closeReasons,
   statusDetails,
   type AttorneyId,
+  type CloseReason,
+  type ConflictCheck,
   type Contact,
   type Outcome,
+  type Status,
 } from '../contact-model';
 import {
   followUpLabel,
@@ -27,16 +30,55 @@ type ContactProps = {
 
 const outcomeTones: Record<Outcome, PillTone> = { won: 'won', lost: 'lost', declined: 'closed' };
 
+type StatusPillProps = {
+  status: Status;
+};
+
+export function StatusPill({ status }: StatusPillProps) {
+  return <Pill tone={status}>{statusDetails[status].label}</Pill>;
+}
+
 export function ContactStatusPill({ contact }: ContactProps) {
   if (contact.status !== 'closed' || contact.closeReason === null) {
-    return <Pill tone={contact.status}>{statusDetails[contact.status].label}</Pill>;
+    return <StatusPill status={contact.status} />;
   }
 
-  const reason = closeReasons[contact.closeReason];
+  return <OutcomePill closeReason={contact.closeReason} short />;
+}
+
+type OutcomePillProps = {
+  closeReason: CloseReason;
+  short?: boolean;
+};
+
+export function OutcomePill({ closeReason, short = false }: OutcomePillProps) {
+  const reason = closeReasons[closeReason];
   return (
     <Pill tone={outcomeTones[reason.outcome]} title={`Closed · ${reason.label}`}>
-      {reason.shortLabel}
+      {short ? reason.shortLabel : reason.label}
     </Pill>
+  );
+}
+
+export const conflictCheckTags: Record<
+  ConflictCheck,
+  { label: string; tone: TagTone; icon: LucideIcon }
+> = {
+  pending: { label: 'Check pending', tone: 'warn', icon: Shield },
+  cleared: { label: 'Cleared', tone: 'ok', icon: ShieldCheck },
+  flagged: { label: 'Possible conflict', tone: 'danger', icon: Flag },
+};
+
+type ConflictCheckTagProps = {
+  conflictCheck: ConflictCheck;
+};
+
+export function ConflictCheckTag({ conflictCheck }: ConflictCheckTagProps) {
+  const { label, tone, icon } = conflictCheckTags[conflictCheck];
+  return (
+    <Tag tone={tone} icon={icon}>
+      {label}
+    </Tag>
   );
 }
 
@@ -78,20 +120,31 @@ const timeInStatusText: Record<TimeInStatusTone, string> = {
   danger: 'text-danger-fg',
 };
 
-export function TimeInStatus({ contact }: ContactProps) {
+type TimeInStatusProps = ContactProps & {
+  showLabel?: boolean;
+};
+
+export function TimeInStatus({ contact, showLabel = false }: TimeInStatusProps) {
   const { days, tone } = timeInStatus(contact);
   const status = statusDetails[contact.status].label;
+  const label = days === 0 ? 'New today' : `${days}d in ${status}`;
 
   return (
     <span
-      title={days === 0 ? 'New today' : `${days}d in ${status}`}
+      title={label}
       className={cx(
         'inline-flex items-center gap-1.75 text-xs font-semibold tabular-nums',
         timeInStatusText[tone],
       )}
     >
       <Meter value={days} max={STATUS_STALLED_DAYS} tone={tone} />
-      {days}d<span className="sr-only"> in {status}</span>
+      {showLabel ? (
+        label
+      ) : (
+        <>
+          {days}d<span className="sr-only"> in {status}</span>
+        </>
+      )}
     </span>
   );
 }

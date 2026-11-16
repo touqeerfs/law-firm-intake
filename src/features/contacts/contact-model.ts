@@ -123,6 +123,20 @@ export const conflictCheckLabels: Record<ConflictCheck, string> = {
   flagged: 'Possible conflict',
 };
 
+export const contactFieldLabels: Record<string, string> = {
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  preferredChannel: 'preferred contact',
+  matterType: 'matter type',
+  summary: 'summary',
+  source: 'source',
+  referredBy: 'referrer',
+  attorneyId: 'attorney',
+  followUpAt: 'follow-up date',
+  conflictCheck: 'conflict check',
+};
+
 export const contactSchema = z.object({
   id: z.string(),
   name: z.string(),
