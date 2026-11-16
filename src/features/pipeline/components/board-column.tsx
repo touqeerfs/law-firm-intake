@@ -17,6 +17,7 @@ type BoardColumnProps = {
   isCurrent: boolean;
   movingId: string | null;
   landedId: string | null;
+  highlightedId: string | null;
   dragged: Contact | null;
   onMove: (contact: Contact, to: Status) => void;
 };
@@ -40,6 +41,7 @@ export function BoardColumn({
   isCurrent,
   movingId,
   landedId,
+  highlightedId,
   dragged,
   onMove,
 }: BoardColumnProps) {
@@ -56,6 +58,7 @@ export function BoardColumn({
         contact={contact}
         isSaving={contact.id === movingId}
         isLanded={contact.id === landedId}
+        isHighlighted={contact.id === highlightedId}
         onMove={onMove}
       />
     </li>

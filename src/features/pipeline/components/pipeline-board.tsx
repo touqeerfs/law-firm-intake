@@ -95,7 +95,8 @@ export function PipelineBoard() {
               state={state}
               isCurrent={status === mobileStatus}
               movingId={movingId}
-              landedId={lastMovedId === droppedId ? lastMovedId : null}
+              landedId={lastMovedId}
+              highlightedId={lastMovedId === droppedId ? lastMovedId : null}
               dragged={dragged}
               onMove={requestMove}
             />

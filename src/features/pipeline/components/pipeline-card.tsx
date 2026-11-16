@@ -13,6 +13,7 @@ type PipelineCardProps = {
   contact: Contact;
   isSaving: boolean;
   isLanded: boolean;
+  isHighlighted: boolean;
   onMove: (contact: Contact, to: Status) => void;
 };
 
@@ -21,7 +22,13 @@ const actionClasses = cx(
   'max-desktop:hidden',
 );
 
-export function PipelineCard({ contact, isSaving, isLanded, onMove }: PipelineCardProps) {
+export function PipelineCard({
+  contact,
+  isSaving,
+  isLanded,
+  isHighlighted,
+  onMove,
+}: PipelineCardProps) {
   const { setNodeRef, setActivatorNodeRef, node, listeners, attributes, isDragging } = useDraggable(
     { id: contact.id },
   );
@@ -42,9 +49,9 @@ export function PipelineCard({ contact, isSaving, isLanded, onMove }: PipelineCa
       aria-busy={isSaving}
       className={cx(
         cardClasses(contact),
-        'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md motion-reduce:transition-none',
+        'group shadow-xs transition hover:-translate-y-px hover:border-border-strong hover:shadow-md',
         isDragging && 'scale-98 opacity-40',
-        isLanded && 'motion-safe:animate-landed',
+        isHighlighted && 'motion-safe:animate-landed',
       )}
     >
       {isSaving && (
