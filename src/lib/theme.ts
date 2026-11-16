@@ -1,4 +1,7 @@
-export type Theme = 'light' | 'dark';
+import { z } from 'zod';
+
+const themeSchema = z.enum(['light', 'dark']);
+export type Theme = z.infer<typeof themeSchema>;
 
 const STORAGE_KEY = 'intake-desk/theme';
 const listeners = new Set<() => void>();
@@ -9,16 +12,17 @@ export const themeScript = `try {
     theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   document.documentElement.dataset.theme = theme;
-} catch (error) {}`;
+} catch {}`;
 
 export function readTheme(): Theme {
-  return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  const result = themeSchema.safeParse(document.documentElement.dataset.theme);
+  return result.success ? result.data : 'light';
 }
 
 export function writeTheme(theme: Theme): void {
   document.documentElement.dataset.theme = theme;
-  window.localStorage.setItem(STORAGE_KEY, theme);
   listeners.forEach((listener) => listener());
+  window.localStorage.setItem(STORAGE_KEY, theme);
 }
 
 export function subscribeToTheme(listener: () => void): () => void {
