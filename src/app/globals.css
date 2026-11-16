@@ -113,6 +113,10 @@
   --container-page: 92.5rem;
 }
 
+@theme static {
+  --toast-offset-mobile: calc(4.75rem + env(safe-area-inset-bottom));
+}
+
 @theme inline {
   --font-display: var(--font-bricolage), var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;

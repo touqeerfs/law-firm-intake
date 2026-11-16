@@ -18,7 +18,7 @@ export function ActivitySection({ contact, activities }: ActivitySectionProps) {
 
   function save(entry: ActivityEntry) {
     addActivity.mutate(
-      { contactId: contact.id, type: entry.type, body: entry.body },
+      { contactId: contact.id, ...entry },
       {
         onSuccess: () =>
           toast.success(`${composerTypes[entry.type].label} saved to ${firstName}'s timeline`),

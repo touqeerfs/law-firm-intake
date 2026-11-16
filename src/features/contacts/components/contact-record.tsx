@@ -43,7 +43,7 @@ export function ContactRecord({ id }: ContactRecordProps) {
 
   if (isPending) return <ContactRecordSkeleton />;
 
-  if (isError) {
+  if (isError && !data) {
     if (error instanceof RepositoryError && error.code === 'not_found') {
       return <ContactNotFound id={id} />;
     }

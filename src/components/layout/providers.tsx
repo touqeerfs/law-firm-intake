@@ -30,7 +30,7 @@ export function Providers({ children }: ProvidersProps) {
       <Toaster
         position="bottom-right"
         icons={toastIcons}
-        mobileOffset={{ bottom: 'calc(4.75rem + env(safe-area-inset-bottom))' }}
+        mobileOffset={{ bottom: 'var(--toast-offset-mobile)' }}
         toastOptions={{
           unstyled: true,
           classNames: {
