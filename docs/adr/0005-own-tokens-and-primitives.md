@@ -4,4 +4,4 @@ The brief says generic AI-generated UI counts against the submission, and the ro
 
 ## Considered Options
 
-- **shadcn/ui**: fast, but its default look is exactly the "generic" result the brief warns about, and it copies a lot of code we'd have to explain.
+- **shadcn/ui**: fast, but its default look is exactly the "generic" result the brief warns about, and it copies in a lot of code we'd then have to own and maintain.

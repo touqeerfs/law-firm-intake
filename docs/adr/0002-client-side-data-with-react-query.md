@@ -4,5 +4,5 @@ localStorage only exists in the browser, so pages render a client component that
 
 ## Considered Options
 
-- **Zustand with `persist`**: less code, but data is synchronous, so loading and error states would have to be faked, and there is no cache invalidation story to explain.
+- **Zustand with `persist`**: less code, but data is synchronous, so loading and error states would have to be faked, and there would be no cache invalidation story.
 - **Server components + server actions**: the idiomatic App Router path for a real database, but the server can't read the browser's localStorage.
