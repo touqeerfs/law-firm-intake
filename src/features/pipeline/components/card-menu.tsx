@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import Link from 'next/link';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { ExternalLink, MoreHorizontal } from 'lucide-react';
@@ -22,6 +23,13 @@ const itemClasses =
 
 export function CardMenu({ contact, onMove }: CardMenuProps) {
   const targets = statusSchema.options.filter((status) => status !== contact.status);
+  const chosenStatus = useRef<Status | null>(null);
+
+  function moveAfterFocusReturns() {
+    if (chosenStatus.current === null) return;
+    onMove(contact, chosenStatus.current);
+    chosenStatus.current = null;
+  }
 
   return (
     <DropdownMenu.Root>
@@ -37,6 +45,7 @@ export function CardMenu({ contact, onMove }: CardMenuProps) {
           align="end"
           sideOffset={6}
           collisionPadding={12}
+          onCloseAutoFocus={moveAfterFocusReturns}
           className="z-50 min-w-57.5 rounded-md border border-border bg-surface p-1.25 shadow-lg"
         >
           <DropdownMenu.Label className="px-2.25 pt-2 pb-1.25 text-2xs font-semibold tracking-wider text-muted uppercase">
@@ -45,7 +54,9 @@ export function CardMenu({ contact, onMove }: CardMenuProps) {
           {targets.map((status) => (
             <DropdownMenu.Item
               key={status}
-              onSelect={() => onMove(contact, status)}
+              onSelect={() => {
+                chosenStatus.current = status;
+              }}
               className={cx(itemClasses, 'items-start')}
             >
               <span
