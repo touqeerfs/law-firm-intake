@@ -41,6 +41,7 @@ src/lib/                small helpers (cx, dates, text)
 - **Closing needs a reason.** Every closed inquiry records why (Retained, Hired another firm…). Every move has Undo. Reopening schedules a follow-up for today so the contact isn't forgotten.
 - **Attention signals.** "Not contacted" marks open inquiries with no call or email yet. Time in status shows a warning at 7 days and turns red as stalled at 14.
 - **Forms validate on blur, then live while you fix.** Messages say what to do ("Add a phone number or email so the team can follow up"), and a summary on submit links to each field.
+- **Quick look keeps your place.** Clicking a card or row opens the record in a drawer (a bottom sheet on mobile) instead of leaving the page, so the board's scroll and the list's filters stay put. J/K step through what's on screen; Cmd/Ctrl-click still opens the full record.
 - **Every screen has its own loading, empty and error states**, reachable through the demo controls.
 - **Own design tokens.** Tailwind's default palette is removed, so only the project's tokens exist. Bricolage Grotesque for headings, Figtree for UI, JetBrains Mono for IDs.
 
