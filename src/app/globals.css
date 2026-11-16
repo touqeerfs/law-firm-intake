@@ -60,6 +60,7 @@
   --color-avatar-coral-to: #c5553a;
 
   --radius-*: initial;
+  --radius-2xs: 3px;
   --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 10px;
@@ -124,6 +125,10 @@
     outline: 3px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
     outline-offset: 0;
   }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
 }
 
 @utility pb-safe {

@@ -16,7 +16,7 @@ export function EmptyState({ icon: Icon, title, children, action }: EmptyStatePr
       </span>
       <h2 className="font-display text-xl font-semibold tracking-tight">{title}</h2>
       <p className="mt-1.5 max-w-md text-muted">{children}</p>
-      {action && <div className="mt-4.5">{action}</div>}
+      {action && <div className="mt-4.5 flex flex-wrap justify-center gap-2">{action}</div>}
     </section>
   );
 }
