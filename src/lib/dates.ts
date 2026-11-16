@@ -78,3 +78,12 @@ export function formatRelative(iso: string): string {
   if (days < 7) return `${days}d ago`;
   return formatShortDate(iso);
 }
+
+export function formatDuration(ms: number): string {
+  const minutes = Math.round(ms / MINUTE_MS);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (hours < 24) return rest === 0 ? `${hours}h` : `${hours}h ${rest}m`;
+  return `${Math.round(hours / 24)}d`;
+}
