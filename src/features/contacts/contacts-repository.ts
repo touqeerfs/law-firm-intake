@@ -130,6 +130,8 @@ export function createContactsRepository({
       const contact = findContact(store, id);
       const activities = store.activities
         .filter((activity) => activity.contactId === id)
+        // Reversed before the stable sort, so entries saved in the same moment list the last one written first
+        .reverse()
         .sort((a, b) => b.at.localeCompare(a.at));
       return { contact, activities };
     },
