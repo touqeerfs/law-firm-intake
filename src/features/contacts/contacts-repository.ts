@@ -140,14 +140,7 @@ export function createContactsRepository({
       await simulateNetwork();
       return write((store) => {
         const contact = findContact(store, id);
-        const activity: Activity = {
-          id: `act_${crypto.randomUUID()}`,
-          contactId: id,
-          at: new Date().toISOString(),
-          actor: COORDINATOR,
-          type: entry.type,
-          body: entry.body,
-        };
+        const activity = createActivity(id, new Date().toISOString(), entry);
         store.activities.push(activity);
         if (entry.type !== 'note') contact.lastContactedAt = activity.at;
         return activity;
@@ -161,17 +154,13 @@ export function createContactsRepository({
         const { status, closeReason, followUpAt, statusChangedAt } = contact;
         Object.assign(contact, applyMove(contact, move, new Date()));
 
-        const activity: Activity = {
-          id: `act_${crypto.randomUUID()}`,
-          contactId: id,
-          at: contact.statusChangedAt,
-          actor: COORDINATOR,
+        const activity = createActivity(id, contact.statusChangedAt, {
           type: 'status_change',
           body: move.to === 'closed' && move.note !== '' ? move.note : null,
           from: status,
           to: move.to,
           closeReason: contact.closeReason,
-        };
+        });
         store.activities.push(activity);
 
         return {

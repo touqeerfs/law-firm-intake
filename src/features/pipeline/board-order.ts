@@ -1,12 +1,8 @@
 import type { Contact, Status, StatusMove } from '@/features/contacts/contact-model';
+import { byName, timeOrLast, type Compare } from '@/features/contacts/contact-rules';
 import { startOfDay } from '@/lib/dates';
 
-type Compare = (a: Contact, b: Contact) => number;
-
-const followUpTime = (contact: Contact) =>
-  contact.followUpAt === null ? Infinity : Date.parse(contact.followUpAt);
-const bySoonestFollowUp: Compare = (a, b) => followUpTime(a) - followUpTime(b);
-const byName: Compare = (a, b) => a.name.localeCompare(b.name);
+const bySoonestFollowUp: Compare = (a, b) => timeOrLast(a.followUpAt) - timeOrLast(b.followUpAt);
 
 const columnOrder: Record<Status, Compare> = {
   lead: (a, b) =>

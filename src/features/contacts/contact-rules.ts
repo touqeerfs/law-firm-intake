@@ -89,11 +89,11 @@ export const contactSortSchema = z.enum([
 ]);
 export type ContactSort = z.infer<typeof contactSortSchema>;
 
-type Compare = (a: Contact, b: Contact) => number;
+export type Compare = (a: Contact, b: Contact) => number;
 
-const timeOrLast = (iso: string | null) => (iso === null ? Infinity : Date.parse(iso));
+export const timeOrLast = (iso: string | null) => (iso === null ? Infinity : Date.parse(iso));
 const timeOrFirst = (iso: string | null) => (iso === null ? -Infinity : Date.parse(iso));
-const byName: Compare = (a, b) => a.name.localeCompare(b.name);
+export const byName: Compare = (a, b) => a.name.localeCompare(b.name);
 
 export const contactSorts: Record<ContactSort, { label: string; compare: Compare }> = {
   newest: {
