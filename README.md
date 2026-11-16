@@ -29,6 +29,7 @@ src/features/pipeline/  board ordering rules and board components
 src/lib/                small helpers (cx, dates, text)
 ```
 
+- **Shared vs feature code**: `components/ui` knows nothing about contacts, so it could move to another app unchanged, and it never imports from `features/`. Anything that knows the domain (a status pill, the pipeline card, the record) lives in its feature folder next to the model, rules and hooks it uses.
 - **Data flow**: component → hook (`useContacts`, `useContact`, `useContactMutations`) → repository → localStorage. Components never touch storage.
 - **Server-like state** (contacts, activities) lives in TanStack Query: loading, error, retry and optimistic board moves with rollback.
 - **List filters** (search, tab, sort) live in URL search params, so a refresh or a shared link shows the same view.
@@ -42,8 +43,10 @@ src/lib/                small helpers (cx, dates, text)
 - **Attention signals.** "Not contacted" marks open inquiries with no call or email yet. Time in status shows a warning at 7 days and turns red as stalled at 14.
 - **Forms validate on blur, then live while you fix.** Messages say what to do ("Add a phone number or email so the team can follow up"), and a summary on submit links to each field.
 - **Quick look keeps your place.** Clicking a card or row opens the record in a drawer (a bottom sheet on mobile) instead of leaving the page, so the board's scroll and the list's filters stay put. J/K step through what's on screen; Cmd/Ctrl-click still opens the full record.
+- **Insights sit above the board.** Follow-ups due, awaiting first contact, median first response and 30-day retention are computed from the same data. The first two are filters, kept in the URL.
+- **Keyboard first.** ⌘/Ctrl+K searches contacts and runs commands; `/`, `N`, `G P`, `G C` and `?` cover the rest, and are ignored while typing.
 - **Every screen has its own loading, empty and error states**, reachable through the demo controls.
-- **Own design tokens.** Tailwind's default palette is removed, so only the project's tokens exist. Bricolage Grotesque for headings, Figtree for UI, JetBrains Mono for IDs.
+- **Own design tokens.** Tailwind's default palette is removed, so only the project's tokens exist. Dark mode only swaps token values, with no `dark:` classes in components. Bricolage Grotesque for headings, Figtree for UI, JetBrains Mono for IDs.
 
 ## One tradeoff and what I'd improve
 
@@ -58,11 +61,10 @@ src/lib/                small helpers (cx, dates, text)
 
 ## How I used AI tools
 
-> **DRAFT: facts for the author to rewrite in their own words. Delete this line before submitting.**
+I used AI throughout, as the brief allows: I directed the work and AI did most of the drafting and coding.
 
-- A throwaway vanilla-JS prototype set the look, spacing and copy before any app code. _(Say how it was made.)_
-- A PRD and ten core issues (plus four optional ones), each with acceptance criteria, were written before building.
-- Claude Code built each issue in its own session, following the rules in `CLAUDE.md`.
-- Each issue ended with a review of its diff against the starting commit. Fixes landed as their own `fix(...)` commits.
-- Every diff was read before committing. Typecheck, lint, 30 unit tests and 2 e2e specs ran before each commit, plus manual checks at desktop width and 390px.
-- Decisions are recorded in `docs/DECISIONS.md` and `docs/adr/`.
+- **Planning.** I described the product and the decisions I wanted. AI drafted a throwaway vanilla-JS prototype (look, spacing and copy), a PRD and 14 issues (10 core, 4 optional), each with acceptance criteria. I reviewed and approved them before any app code was written.
+- **Rules.** `CLAUDE.md` fixes the architecture, code rules and test seams that every session had to follow.
+- **Building.** Claude Code built one issue per session. I read each diff before it was committed. Typecheck, lint, 32 unit tests and 2 Playwright specs ran before each commit, plus checks at desktop width and 390px.
+- **Review.** Each issue ended with an AI review of its diff against the issue and the code rules. Fixes landed as their own `fix(...)` commits.
+- **Decisions** are recorded in `docs/DECISIONS.md` and `docs/adr/`.
