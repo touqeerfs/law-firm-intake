@@ -1,6 +1,6 @@
 import { cx } from '@/lib/cx';
 
-type AvatarSize = 'xs' | 'sm' | 'md';
+type AvatarSize = 'xs' | 'sm' | 'md' | 'lg';
 
 type AvatarProps = {
   name: string;
@@ -11,6 +11,7 @@ const sizeClasses: Record<AvatarSize, string> = {
   xs: 'size-5 text-3xs',
   sm: 'size-6 text-2xs',
   md: 'size-7.5 text-2xs',
+  lg: 'size-14 text-xl',
 };
 
 const gradients = [

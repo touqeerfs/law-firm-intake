@@ -79,6 +79,7 @@ export function ContactsList() {
           <ContactsListSkeleton />
         ) : isError ? (
           <ContactsLoadError
+            title="Couldn't load contacts."
             error={error}
             isRetrying={isFetching}
             onRetry={() => refetch()}

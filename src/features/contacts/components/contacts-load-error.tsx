@@ -1,21 +1,30 @@
 import { CircleAlert, RefreshCw, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ErrorBanner } from '@/components/ui/error-banner';
+import { Banner } from '@/components/ui/banner';
 import { RepositoryError } from '../repository-error';
 
 type ContactsLoadErrorProps = {
+  title: string;
   error: Error;
   isRetrying: boolean;
   onRetry: () => void;
   onReset: () => void;
 };
 
-export function ContactsLoadError({ error, isRetrying, onRetry, onReset }: ContactsLoadErrorProps) {
+export function ContactsLoadError({
+  title,
+  error,
+  isRetrying,
+  onRetry,
+  onReset,
+}: ContactsLoadErrorProps) {
   const code = error instanceof RepositoryError ? error.code : null;
 
   if (code === 'corrupt') {
     return (
-      <ErrorBanner
+      <Banner
+        tone="danger"
+        role="alert"
         icon={CircleAlert}
         title="We couldn't read the data saved in this browser."
         action={
@@ -26,14 +35,16 @@ export function ContactsLoadError({ error, isRetrying, onRetry, onReset }: Conta
       >
         It may have been edited by hand or saved by an older version. Resetting restores the sample
         intake list.
-      </ErrorBanner>
+      </Banner>
     );
   }
 
   return (
-    <ErrorBanner
+    <Banner
+      tone="danger"
+      role="alert"
       icon={code === 'network' ? WifiOff : CircleAlert}
-      title="Couldn't load contacts."
+      title={title}
       action={
         <Button size="sm" onClick={onRetry} disabled={isRetrying}>
           <RefreshCw className="size-3.5" aria-hidden />
@@ -42,6 +53,6 @@ export function ContactsLoadError({ error, isRetrying, onRetry, onReset }: Conta
       }
     >
       {error.message} Nothing you&apos;ve saved has been lost.
-    </ErrorBanner>
+    </Banner>
   );
 }

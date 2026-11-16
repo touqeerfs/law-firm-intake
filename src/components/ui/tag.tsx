@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { cx } from '@/lib/cx';
 
-type TagTone = 'neutral' | 'warn' | 'danger';
+export type TagTone = 'neutral' | 'ok' | 'warn' | 'danger' | 'outline';
 
 type TagProps = {
   tone?: TagTone;
@@ -12,8 +12,10 @@ type TagProps = {
 
 const toneClasses: Record<TagTone, string> = {
   neutral: 'bg-surface-3 text-text-2',
+  ok: 'bg-won-bg text-won-fg',
   warn: 'bg-warn-bg text-warn-fg',
   danger: 'bg-danger-bg text-danger-fg',
+  outline: 'text-text-2 ring-1 ring-border ring-inset',
 };
 
 export function Tag({ tone = 'neutral', icon: Icon, children }: TagProps) {
