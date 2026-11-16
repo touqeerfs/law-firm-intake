@@ -12,7 +12,7 @@ import {
 } from '../contact-model';
 import { PHONE_OR_EMAIL_MESSAGE, type ContactFormInput } from '../contact-form-schema';
 import { findContactByEmail } from '../contact-rules';
-import { useContactFormField } from '../use-contact-form-field';
+import { useContactFieldProps } from '../use-contact-field-props';
 import { useContacts } from '../use-contacts';
 
 type WhoSectionProps = {
@@ -33,7 +33,7 @@ export function WhoSection({ contactId }: WhoSectionProps) {
     trigger,
     formState: { errors },
   } = useFormContext<ContactFormInput>();
-  const fieldProps = useContactFormField();
+  const fieldProps = useContactFieldProps();
   const email = useWatch<ContactFormInput, 'email'>({ name: 'email' });
   const { data: contacts = [] } = useContacts();
 

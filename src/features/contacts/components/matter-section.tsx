@@ -6,14 +6,14 @@ import { Select, TextArea, TextInput } from '@/components/ui/input';
 import { cx } from '@/lib/cx';
 import { matterTypeSchema, sourceSchema } from '../contact-model';
 import { SUMMARY_MAX_LENGTH, type ContactFormInput } from '../contact-form-schema';
-import { useContactFormField } from '../use-contact-form-field';
+import { useContactFieldProps } from '../use-contact-field-props';
 
 export function MatterSection() {
   const {
     clearErrors,
     formState: { errors },
   } = useFormContext<ContactFormInput>();
-  const fieldProps = useContactFormField();
+  const fieldProps = useContactFieldProps();
   const [source, summary] = useWatch<ContactFormInput, ['source', 'summary']>({
     name: ['source', 'summary'],
   });

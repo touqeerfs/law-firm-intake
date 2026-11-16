@@ -44,6 +44,7 @@ const editTrackedFields = [
   'attorneyId',
   'followUpAt',
   'conflictCheck',
+  'closeReason',
 ] as const satisfies ReadonlyArray<keyof ContactInput>;
 
 type ActivityDetails = Omit<Activity, 'id' | 'contactId' | 'at' | 'actor'>;
@@ -52,9 +53,11 @@ function createActivity(contactId: string, at: string, details: ActivityDetails)
   return { id: `act_${crypto.randomUUID()}`, contactId, at, actor: COORDINATOR, ...details };
 }
 
+const FIRST_CONTACT_NUMBER = 1041;
+
 function nextContactId(contacts: Contact[]): string {
   const numbers = contacts.map((contact) => Number(contact.id.replace('INT-', '')) || 0);
-  return `INT-${Math.max(1040, ...numbers) + 1}`;
+  return `INT-${Math.max(FIRST_CONTACT_NUMBER - 1, ...numbers) + 1}`;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -217,6 +220,11 @@ export function createContactsRepository({
         const now = new Date().toISOString();
         const changedFields = editTrackedFields.filter((field) => contact[field] !== input[field]);
 
+        if (changedFields.length > 0) {
+          store.activities.push(
+            createActivity(id, now, { type: 'edit', body: null, changedFields }),
+          );
+        }
         if (contact.status !== input.status) {
           store.activities.push(
             createActivity(id, now, {
@@ -228,11 +236,6 @@ export function createContactsRepository({
             }),
           );
           contact.statusChangedAt = now;
-        }
-        if (changedFields.length > 0) {
-          store.activities.push(
-            createActivity(id, now, { type: 'edit', body: null, changedFields }),
-          );
         }
         Object.assign(contact, input);
         return contact;

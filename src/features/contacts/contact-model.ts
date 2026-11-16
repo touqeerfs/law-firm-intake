@@ -138,6 +138,7 @@ export const contactFieldLabels: Record<string, string> = {
   attorneyId: 'attorney',
   followUpAt: 'follow-up date',
   conflictCheck: 'conflict check',
+  closeReason: 'close reason',
 };
 
 export const contactSchema = z.object({

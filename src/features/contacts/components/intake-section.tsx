@@ -16,7 +16,7 @@ import {
   statusSchema,
 } from '../contact-model';
 import type { ContactFormInput } from '../contact-form-schema';
-import { useContactFormField } from '../use-contact-form-field';
+import { useContactFieldProps } from '../use-contact-field-props';
 import { conflictCheckTags, statusDotClasses } from './contact-fields';
 
 export function IntakeSection() {
@@ -25,7 +25,7 @@ export function IntakeSection() {
     clearErrors,
     formState: { errors },
   } = useFormContext<ContactFormInput>();
-  const fieldProps = useContactFormField();
+  const fieldProps = useContactFieldProps();
   const status = useWatch<ContactFormInput, 'status'>({ name: 'status' });
 
   return (
@@ -34,7 +34,7 @@ export function IntakeSection() {
       title="Intake & follow-up"
       description="Where this inquiry stands and when the team should call next."
     >
-      <ChoiceGroup legend="Stage" hint={`${statusDetails[status].hint}.`}>
+      <ChoiceGroup legend="Status" hint={`${statusDetails[status].hint}.`}>
         {statusSchema.options.map((option) => (
           <Choice
             key={option}

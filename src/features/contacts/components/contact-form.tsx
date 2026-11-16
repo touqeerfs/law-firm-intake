@@ -68,6 +68,7 @@ export function ContactForm({ contact, initialName = '' }: ContactFormProps) {
   }
 
   function save(input: ContactInput) {
+    if (isSaving) return;
     if (contact) {
       updateContact.mutate(
         { id: contact.id, input },

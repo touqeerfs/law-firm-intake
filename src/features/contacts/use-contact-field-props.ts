@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { fieldMessageId } from '@/components/ui/field';
 import type { ContactFormField, ContactFormInput } from './contact-form-schema';
 
-export function useContactFormField() {
+export function useContactFieldProps() {
   const {
     register,
     formState: { errors },
