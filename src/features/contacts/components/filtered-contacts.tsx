@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { Contact } from '../contact-model';
 import { listViewSchema, listViews, matchesSearch, sortContacts } from '../contact-rules';
@@ -9,6 +9,7 @@ import { ContactCards } from './contact-cards';
 import { ContactsTable } from './contacts-table';
 import { ListViewTabs } from './list-view-tabs';
 import { EmptyView, NoSearchMatches } from './no-matches';
+import { QuickLookDrawer } from './quick-look-drawer';
 import { SearchBox } from './search-box';
 import { SortMenu } from './sort-menu';
 
@@ -18,6 +19,7 @@ type FilteredContactsProps = {
 
 export function FilteredContacts({ contacts }: FilteredContactsProps) {
   const { query, view, sort, setParams } = useListParams();
+  const [quickLookId, setQuickLookId] = useState<string | null>(null);
 
   const searched = useMemo(
     () => contacts.filter((contact) => matchesSearch(contact, query)),
@@ -80,10 +82,26 @@ export function FilteredContacts({ contacts }: FilteredContactsProps) {
             contacts={visible}
             query={query}
             sort={sort}
+            selectedId={quickLookId}
             onSortChange={(nextSort) => setParams({ sort: nextSort })}
+            onOpen={setQuickLookId}
           />
-          <ContactCards contacts={visible} query={query} />
+          <ContactCards
+            contacts={visible}
+            query={query}
+            selectedId={quickLookId}
+            onOpen={setQuickLookId}
+          />
         </>
+      )}
+
+      {quickLookId && (
+        <QuickLookDrawer
+          contactId={quickLookId}
+          contactIds={visible.map((contact) => contact.id)}
+          onShow={setQuickLookId}
+          onClose={() => setQuickLookId(null)}
+        />
       )}
     </>
   );

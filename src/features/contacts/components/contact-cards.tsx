@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Avatar } from '@/components/ui/avatar';
 import { Highlight } from '@/components/ui/highlight';
+import { cx } from '@/lib/cx';
+import { onPlainClick } from '@/lib/plain-click';
 import { attorneys, type Contact } from '../contact-model';
 import { isNotContacted } from '../contact-rules';
 import {
@@ -14,14 +16,23 @@ import {
 type ContactCardsProps = {
   contacts: Contact[];
   query: string;
+  selectedId: string | null;
+  onOpen: (contactId: string) => void;
 };
 
-export function ContactCards({ contacts, query }: ContactCardsProps) {
+export function ContactCards({ contacts, query, selectedId, onOpen }: ContactCardsProps) {
   return (
     <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface wide:hidden">
       {contacts.map((contact) => (
         <li key={contact.id}>
-          <Link href={`/contacts/${contact.id}`} className="flex items-start gap-3 p-3.5">
+          <Link
+            href={`/contacts/${contact.id}`}
+            onClick={onPlainClick(() => onOpen(contact.id))}
+            className={cx(
+              'flex items-start gap-3 p-3.5',
+              contact.id === selectedId && 'bg-accent-soft',
+            )}
+          >
             <Avatar name={contact.name} />
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">

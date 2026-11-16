@@ -3,6 +3,7 @@ import { ChevronRight } from 'lucide-react';
 import { Avatar } from '@/components/ui/avatar';
 import { Highlight } from '@/components/ui/highlight';
 import { cx } from '@/lib/cx';
+import { onPlainClick } from '@/lib/plain-click';
 import type { Contact } from '../contact-model';
 import { isNotContacted, type ContactSort } from '../contact-rules';
 import {
@@ -21,12 +22,16 @@ type ContactsTableProps = {
   contacts: Contact[];
   query: string;
   sort: ContactSort;
+  selectedId: string | null;
   onSortChange: (sort: ContactSort) => void;
+  onOpen: (contactId: string) => void;
 };
 
 type ContactRowProps = {
   contact: Contact;
   query: string;
+  isSelected: boolean;
+  onOpen: (contactId: string) => void;
 };
 
 const headClasses =
@@ -34,9 +39,14 @@ const headClasses =
 const cellClasses = 'h-14.5 truncate border-b border-border px-3.5 group-last:border-b-0';
 const xwideOnly = 'hidden xwide:table-cell';
 
-function ContactRow({ contact, query }: ContactRowProps) {
+function ContactRow({ contact, query, isSelected, onOpen }: ContactRowProps) {
   return (
-    <tr className="group relative transition-colors hover:bg-surface-2">
+    <tr
+      className={cx(
+        'group relative transition-colors',
+        isSelected ? 'bg-accent-soft' : 'hover:bg-surface-2',
+      )}
+    >
       <td className={cellClasses}>
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={contact.name} />
@@ -44,6 +54,7 @@ function ContactRow({ contact, query }: ContactRowProps) {
             <div className="flex items-center gap-1.5">
               <Link
                 href={`/contacts/${contact.id}`}
+                onClick={onPlainClick(() => onOpen(contact.id))}
                 className="truncate font-semibold after:absolute after:inset-0"
               >
                 <Highlight text={contact.name} query={query} />
@@ -86,7 +97,14 @@ function ContactRow({ contact, query }: ContactRowProps) {
   );
 }
 
-export function ContactsTable({ contacts, query, sort, onSortChange }: ContactsTableProps) {
+export function ContactsTable({
+  contacts,
+  query,
+  sort,
+  selectedId,
+  onSortChange,
+  onOpen,
+}: ContactsTableProps) {
   return (
     <div className="hidden overflow-hidden rounded-xl border border-border bg-surface shadow-xs wide:block">
       <table className="w-full table-fixed border-separate border-spacing-0">
@@ -130,7 +148,13 @@ export function ContactsTable({ contacts, query, sort, onSortChange }: ContactsT
         </thead>
         <tbody>
           {contacts.map((contact) => (
-            <ContactRow key={contact.id} contact={contact} query={query} />
+            <ContactRow
+              key={contact.id}
+              contact={contact}
+              query={query}
+              isSelected={contact.id === selectedId}
+              onOpen={onOpen}
+            />
           ))}
         </tbody>
       </table>
