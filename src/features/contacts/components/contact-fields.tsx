@@ -30,6 +30,12 @@ type ContactProps = {
 
 const outcomeTones: Record<Outcome, PillTone> = { won: 'won', lost: 'lost', declined: 'closed' };
 
+export const statusDotClasses: Record<Status, string> = {
+  lead: 'bg-lead',
+  active: 'bg-active',
+  closed: 'bg-closed',
+};
+
 type StatusPillProps = {
   status: Status;
 };

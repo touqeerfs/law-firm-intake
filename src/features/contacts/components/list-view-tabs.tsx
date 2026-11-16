@@ -1,6 +1,6 @@
 import { cx } from '@/lib/cx';
-import type { Status } from '../contact-model';
 import { listViews, type ListView } from '../contact-rules';
+import { statusDotClasses } from './contact-fields';
 
 export type ListViewTab = {
   view: ListView;
@@ -11,12 +11,6 @@ type ListViewTabsProps = {
   tabs: ListViewTab[];
   currentView: ListView;
   onViewChange: (view: ListView) => void;
-};
-
-const statusDotClasses: Record<Status, string> = {
-  lead: 'bg-lead',
-  active: 'bg-active',
-  closed: 'bg-closed',
 };
 
 export function ListViewTabs({ tabs, currentView, onViewChange }: ListViewTabsProps) {
