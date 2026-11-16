@@ -76,6 +76,9 @@ export const closeReasons: Record<CloseReason, CloseReasonDetails> = {
   },
 };
 
+export type StatusMove =
+  { to: Exclude<Status, 'closed'> } | { to: 'closed'; closeReason: CloseReason; note: string };
+
 export const matterTypeSchema = z.enum([
   'Family',
   'Employment',
