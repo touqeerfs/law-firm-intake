@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, Figtree, JetBrains_Mono } from 'next/font/google';
+import { AppShell } from '@/components/layout/app-shell';
 import { cx } from '@/lib/cx';
 import './globals.css';
 
@@ -19,7 +20,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={cx(bricolage.variable, figtree.variable, jetbrainsMono.variable)}>
-      <body>{children}</body>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
