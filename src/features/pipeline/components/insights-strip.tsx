@@ -19,7 +19,7 @@ type InsightTilesProps = Omit<InsightsStripProps, 'contacts'> & {
 };
 
 function InsightTiles({ contacts, activities, focus, onFocusChange }: InsightTilesProps) {
-  const metrics = boardMetrics(contacts, activities, new Date());
+  const metrics = boardMetrics(contacts, activities);
   const { outcomes, withinTargetPercent, longestWaitMs, medianFirstResponseMs } = metrics;
   const toggle = (tile: BoardFocus) => onFocusChange(focus === tile ? null : tile);
 

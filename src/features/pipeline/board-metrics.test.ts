@@ -1,8 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Activity, Contact } from '@/features/contacts/contact-model';
 import { boardMetrics } from './board-metrics';
-
-const now = new Date(2026, 10, 16, 15);
 
 function localIso(day: number, hour = 10, minute = 0): string {
   return new Date(2026, 10, day, hour, minute).toISOString();
@@ -36,6 +34,15 @@ function buildActivity(contactId: string, type: Activity['type'], at: string): A
 }
 
 describe('boardMetrics', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 10, 16, 15));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('takes the median time from a contact being created to their first call or email', () => {
     const contacts = [
       buildContact({ id: 'INT-1001' }),
@@ -52,7 +59,7 @@ describe('boardMetrics', () => {
       buildActivity('INT-1004', 'note', localIso(10, 10, 10)),
     ];
 
-    const metrics = boardMetrics(contacts, activities, now);
+    const metrics = boardMetrics(contacts, activities);
 
     expect(metrics.medianFirstResponseMs).toBe(5_400_000);
     expect(metrics.withinTargetPercent).toBe(33);
@@ -75,7 +82,7 @@ describe('boardMetrics', () => {
       buildContact({ status: 'active' }),
     ];
 
-    const metrics = boardMetrics(contacts, [], now);
+    const metrics = boardMetrics(contacts, []);
 
     expect(metrics.closedCount).toBe(5);
     expect(metrics.outcomes).toEqual({ won: 2, lost: 2, declined: 1 });

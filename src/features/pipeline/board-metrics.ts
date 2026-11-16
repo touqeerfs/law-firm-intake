@@ -51,17 +51,18 @@ function firstResponseTimes(contacts: Contact[], activities: Activity[]): number
   });
 }
 
-export function boardMetrics(contacts: Contact[], activities: Activity[], now: Date): BoardMetrics {
+export function boardMetrics(contacts: Contact[], activities: Activity[]): BoardMetrics {
+  const now = Date.now();
   const waits = contacts
     .filter(isNotContacted)
-    .map((contact) => now.getTime() - Date.parse(contact.createdAt));
+    .map((contact) => now - Date.parse(contact.createdAt));
   const responseTimes = firstResponseTimes(contacts, activities);
   const withinTarget = responseTimes.filter((time) => time <= FIRST_RESPONSE_TARGET_MS);
 
   const closedRecently = contacts.filter(
     (contact) =>
       contact.status === 'closed' &&
-      now.getTime() - Date.parse(contact.statusChangedAt) <= RETENTION_WINDOW_MS,
+      now - Date.parse(contact.statusChangedAt) <= RETENTION_WINDOW_MS,
   );
   const outcomes: Record<Outcome, number> = { won: 0, lost: 0, declined: 0 };
   for (const contact of closedRecently) {
