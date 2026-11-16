@@ -9,6 +9,7 @@ type EntryType = ActivityEntry['type'];
 type ActivityComposerProps = {
   status: 'idle' | 'pending' | 'error' | 'success';
   onSave: (entry: ActivityEntry) => void;
+  onDraftChange?: (hasDraft: boolean) => void;
 };
 
 export const composerTypes: Record<
@@ -38,7 +39,7 @@ export const composerTypes: Record<
 
 const entryTypes: EntryType[] = ['note', 'call', 'email'];
 
-export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
+export function ActivityComposer({ status, onSave, onDraftChange }: ActivityComposerProps) {
   const [type, setType] = useState<EntryType>('note');
   const [body, setBody] = useState('');
   const [showError, setShowError] = useState(false);
@@ -57,6 +58,7 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
     }
     onSave({ type, body: trimmed });
     setBody('');
+    onDraftChange?.(false);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
@@ -108,6 +110,7 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
         onChange={(event) => {
           setBody(event.target.value);
           setShowError(false);
+          onDraftChange?.(event.target.value.trim() !== '');
         }}
         onKeyDown={handleKeyDown}
         placeholder={composerTypes[type].placeholder}

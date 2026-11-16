@@ -20,9 +20,14 @@ import { StatusStepper } from './status-stepper';
 
 type ContactRecordProps = {
   id: string;
+  onDraftChange?: (hasDraft: boolean) => void;
 };
 
-function ContactNotFound({ id }: ContactRecordProps) {
+type ContactNotFoundProps = {
+  id: string;
+};
+
+function ContactNotFound({ id }: ContactNotFoundProps) {
   return (
     <EmptyState
       icon={FolderSearch}
@@ -40,7 +45,7 @@ function ContactNotFound({ id }: ContactRecordProps) {
   );
 }
 
-function RecordContent({ id }: ContactRecordProps) {
+function RecordContent({ id, onDraftChange }: ContactRecordProps) {
   const { data, error, isPending, isError, isFetching, refetch } = useContact(id);
   const { changeData } = useDemoControls();
   const { requestMove, closing, confirmClose, cancelClose } = useStatusMove();
@@ -74,7 +79,7 @@ function RecordContent({ id }: ContactRecordProps) {
           <MatterCard contact={contact} />
           <ContactDetailsCard contact={contact} />
         </div>
-        <ActivitySection contact={contact} activities={activities} />
+        <ActivitySection contact={contact} activities={activities} onDraftChange={onDraftChange} />
       </div>
       {closing && (
         <CloseReasonDialog contact={closing} onConfirm={confirmClose} onCancel={cancelClose} />
@@ -83,10 +88,10 @@ function RecordContent({ id }: ContactRecordProps) {
   );
 }
 
-export function ContactRecord({ id }: ContactRecordProps) {
+export function ContactRecord(props: ContactRecordProps) {
   return (
     <div className="@container">
-      <RecordContent id={id} />
+      <RecordContent {...props} />
     </div>
   );
 }

@@ -10,9 +10,10 @@ import type { PendingEntry } from './timeline-item';
 type ActivitySectionProps = {
   contact: Contact;
   activities: Activity[];
+  onDraftChange?: (hasDraft: boolean) => void;
 };
 
-export function ActivitySection({ contact, activities }: ActivitySectionProps) {
+export function ActivitySection({ contact, activities, onDraftChange }: ActivitySectionProps) {
   const { addActivity } = useContactMutations();
   const headingId = useId();
 
@@ -48,7 +49,7 @@ export function ActivitySection({ contact, activities }: ActivitySectionProps) {
 
   return (
     <section aria-labelledby={headingId} className="min-w-0 flex-1">
-      <ActivityComposer status={addActivity.status} onSave={save} />
+      <ActivityComposer status={addActivity.status} onSave={save} onDraftChange={onDraftChange} />
       <div className="mb-1.5 flex items-center justify-between">
         <h2 id={headingId} className="font-semibold">
           Activity
