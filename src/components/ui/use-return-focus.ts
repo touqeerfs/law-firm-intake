@@ -5,10 +5,7 @@ export function useReturnFocus() {
 
   return function returnFocus(event: Event) {
     event.preventDefault();
-    const target =
-      opener instanceof HTMLElement && opener.isConnected
-        ? opener
-        : document.getElementById('main');
-    target?.focus();
+    if (opener instanceof HTMLElement && opener.isConnected) opener.focus();
+    else if (document.activeElement === document.body) document.getElementById('main')?.focus();
   };
 }
