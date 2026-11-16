@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Folder } from 'lucide-react';
 import { buttonClasses } from '@/components/ui/button';
+import { cx } from '@/lib/cx';
 
 export const metadata: Metadata = { title: 'Not found' };
 
@@ -18,7 +19,7 @@ export default function NotFound() {
         The link may be out of date. Everything on the intake desk is reachable from the pipeline or
         contacts.
       </p>
-      <Link href="/pipeline" className={`${buttonClasses({ variant: 'primary' })} mt-4.5`}>
+      <Link href="/pipeline" className={cx(buttonClasses({ variant: 'primary' }), 'mt-4.5')}>
         Go to pipeline
       </Link>
     </section>
