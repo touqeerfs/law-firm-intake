@@ -141,3 +141,22 @@
 @utility pb-safe {
   padding-bottom: calc(--spacing(1.5) + env(safe-area-inset-bottom));
 }
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@utility saving-shimmer {
+  background-image: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

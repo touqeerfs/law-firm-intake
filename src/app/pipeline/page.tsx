@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { PageHeader } from '@/components/layout/page-header';
+import { PipelineBoard } from '@/features/pipeline/components/pipeline-board';
 
 export const metadata: Metadata = { title: 'Pipeline' };
 
 export default function PipelinePage() {
-  return <PageHeader title="Pipeline" />;
+  return <PipelineBoard />;
 }

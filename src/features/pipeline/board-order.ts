@@ -18,6 +18,12 @@ const columnOrder: Record<Status, Compare> = {
   closed: (a, b) => Date.parse(b.statusChangedAt) - Date.parse(a.statusChangedAt) || byName(a, b),
 };
 
+export const columnSortHints: Record<Status, string> = {
+  lead: 'Soonest follow-up first',
+  active: 'Soonest follow-up first',
+  closed: 'Most recently closed first',
+};
+
 export function boardColumns(contacts: Contact[]): Record<Status, Contact[]> {
   const column = (status: Status) =>
     contacts.filter((contact) => contact.status === status).toSorted(columnOrder[status]);
