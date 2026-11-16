@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useState, type KeyboardEvent } from 'react';
 import { Search } from 'lucide-react';
-import { isTypingIn } from '@/lib/is-typing-in';
+import { PAGE_SEARCH_ID } from '@/lib/keyboard';
 
 type SearchBoxProps = {
   query: string;
@@ -12,7 +12,6 @@ type SearchBoxProps = {
 const SEARCH_DELAY_MS = 120;
 
 export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState(query);
   const [sentQuery, setSentQuery] = useState(query);
   const [urlQuery, setUrlQuery] = useState(query);
@@ -38,16 +37,6 @@ export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
     return () => clearTimeout(timer);
   }, [value, sentQuery, onQueryChange]);
 
-  useEffect(() => {
-    function focusOnSlash(event: globalThis.KeyboardEvent) {
-      if (event.key !== '/' || isTypingIn(event.target)) return;
-      event.preventDefault();
-      inputRef.current?.focus();
-    }
-    document.addEventListener('keydown', focusOnSlash);
-    return () => document.removeEventListener('keydown', focusOnSlash);
-  }, []);
-
   function clearOnEscape(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Escape') setValue('');
   }
@@ -57,7 +46,7 @@ export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
       <Search className="size-3.75 shrink-0" aria-hidden />
       <span className="sr-only">Search contacts</span>
       <input
-        ref={inputRef}
+        id={PAGE_SEARCH_ID}
         type="search"
         value={value}
         onChange={(event) => setValue(event.target.value)}

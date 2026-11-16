@@ -1,3 +1,4 @@
+import { SidebarSearchButton } from './palette-buttons';
 import { SidebarNav } from './sidebar-nav';
 import { WorkspaceMark } from './workspace-mark';
 
@@ -12,6 +13,7 @@ export function Sidebar() {
         </div>
       </div>
 
+      <SidebarSearchButton />
       <SidebarNav />
 
       <div className="mt-auto flex items-center gap-2.5 p-2">
