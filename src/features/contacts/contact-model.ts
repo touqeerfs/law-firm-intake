@@ -171,6 +171,11 @@ export const activitySchema = z.object({
 });
 export type Activity = z.infer<typeof activitySchema>;
 
+export type ActivityEntry = {
+  type: Extract<ActivityType, 'note' | 'call' | 'email'>;
+  body: string;
+};
+
 export const storeSchema = z.object({
   version: z.literal(1),
   contacts: z.array(contactSchema),

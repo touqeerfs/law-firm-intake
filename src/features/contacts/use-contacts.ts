@@ -8,3 +8,10 @@ export function useContacts() {
     queryFn: () => getContactsRepository().listContacts(),
   });
 }
+
+export function useContact(id: string) {
+  return useQuery({
+    queryKey: contactKeys.detail(id),
+    queryFn: () => getContactsRepository().getContact(id),
+  });
+}

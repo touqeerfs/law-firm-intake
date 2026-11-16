@@ -1,4 +1,11 @@
-import { storeSchema, type Activity, type Contact, type Store } from './contact-model';
+import {
+  COORDINATOR,
+  storeSchema,
+  type Activity,
+  type ActivityEntry,
+  type Contact,
+  type Store,
+} from './contact-model';
 import type { NetworkMode } from './network-mode';
 import { RepositoryError } from './repository-error';
 import { buildSeed } from './seed-data';
@@ -63,6 +70,13 @@ export function createContactsRepository({
     return result.data;
   }
 
+  function write<T>(change: (store: Store) => T): T {
+    const store = readStore();
+    const result = change(store);
+    saveStore(store);
+    return result;
+  }
+
   return {
     async listContacts(): Promise<Contact[]> {
       await simulateNetwork();
@@ -79,6 +93,26 @@ export function createContactsRepository({
         .filter((activity) => activity.contactId === id)
         .sort((a, b) => b.at.localeCompare(a.at));
       return { contact, activities };
+    },
+
+    async addActivity(id: string, entry: ActivityEntry): Promise<Activity> {
+      await simulateNetwork();
+      return write((store) => {
+        const contact = store.contacts.find((candidate) => candidate.id === id);
+        if (!contact) throw new RepositoryError('not_found');
+
+        const activity: Activity = {
+          id: `act_${crypto.randomUUID()}`,
+          contactId: id,
+          at: new Date().toISOString(),
+          actor: COORDINATOR,
+          type: entry.type,
+          body: entry.body,
+        };
+        store.activities.push(activity);
+        if (entry.type !== 'note') contact.lastContactedAt = activity.at;
+        return activity;
+      });
     },
 
     async resetData(mode: ResetMode): Promise<void> {
