@@ -48,4 +48,26 @@ describe('contacts repository', () => {
     await expect(repository.resetData('empty')).rejects.toMatchObject({ code: 'storage' });
     expect(await repository.listContacts()).toHaveLength(19);
   });
+
+  it('restores the contact and removes the status change when a close is undone', async () => {
+    const repository = createRepository(createMemoryStorage());
+    const before = await repository.getContact('INT-1042');
+
+    const { contact, undo } = await repository.moveContact('INT-1042', {
+      to: 'closed',
+      closeReason: 'hired_other',
+      note: 'Went with a firm closer to home.',
+    });
+    expect(contact).toMatchObject({
+      status: 'closed',
+      closeReason: 'hired_other',
+      followUpAt: null,
+    });
+
+    await repository.undoMove(undo);
+
+    const after = await repository.getContact('INT-1042');
+    expect(after.contact.status).toBe('lead');
+    expect(after).toEqual(before);
+  });
 });
