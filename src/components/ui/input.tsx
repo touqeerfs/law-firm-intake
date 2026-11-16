@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { cx } from '@/lib/cx';
 
 const inputClasses =
-  'w-full rounded-sm border border-border-strong bg-surface px-3 shadow-xs transition-colors placeholder:text-faint hover:border-faint focus:border-accent focus:ring-3 focus:ring-accent/30 focus:outline-none aria-invalid:border-danger aria-invalid:focus:ring-danger/20';
+  'w-full rounded-sm border border-border-strong bg-surface px-3 shadow-xs transition-colors placeholder:text-muted hover:border-faint focus:border-accent focus:ring-3 focus:ring-accent/30 focus:outline-none aria-invalid:border-danger aria-invalid:focus:ring-danger/20';
 
 export function TextInput({ className, ...props }: ComponentProps<'input'>) {
   return <input className={cx(inputClasses, 'h-9.5', className)} {...props} />;

@@ -37,7 +37,7 @@ export function ActivityTimeline({ contact, activities, pending }: ActivityTimel
 
   return groupByDay(all).map((group) => (
     <div key={group.label}>
-      <h3 className="flex items-center gap-2.5 pt-3.5 pb-2 text-2xs font-semibold tracking-wider text-faint uppercase after:h-px after:flex-1 after:bg-border">
+      <h3 className="flex items-center gap-2.5 pt-3.5 pb-2 text-2xs font-semibold tracking-wider text-muted uppercase after:h-px after:flex-1 after:bg-border">
         {group.label}
       </h3>
       <ol>

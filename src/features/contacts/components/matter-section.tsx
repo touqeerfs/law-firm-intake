@@ -70,7 +70,7 @@ export function MatterSection() {
         aside={
           <span
             className={cx(
-              'text-xs text-faint tabular-nums',
+              'text-xs text-muted tabular-nums',
               summary.length > SUMMARY_MAX_LENGTH && 'font-semibold text-danger-fg',
             )}
           >

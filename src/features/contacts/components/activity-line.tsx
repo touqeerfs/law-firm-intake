@@ -40,7 +40,7 @@ export function ActivityLine({ activity, contact }: ActivityLineProps) {
         <>
           {actor} moved
           {activity.from && <StatusPill status={activity.from} />}
-          <ArrowRight className="size-3.25 text-faint" aria-label="to" />
+          <ArrowRight className="size-3.25 text-muted" aria-label="to" />
           {activity.to && <StatusPill status={activity.to} />}
           {activity.closeReason && <OutcomePill closeReason={activity.closeReason} />}
         </>

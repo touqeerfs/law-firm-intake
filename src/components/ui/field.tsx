@@ -66,7 +66,7 @@ export function Field({
               *
             </span>
           )}
-          {optional && <span className="ml-1 font-medium text-faint">optional</span>}
+          {optional && <span className="ml-1 font-medium text-muted">optional</span>}
         </label>
         {aside}
       </div>

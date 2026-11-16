@@ -103,7 +103,7 @@ export function FollowUpTag({ contact, fallback = null }: FollowUpTagProps) {
 }
 
 export function NoValue() {
-  return <span className="text-faint">—</span>;
+  return <span className="text-muted">—</span>;
 }
 
 export function ConflictFlag() {
@@ -162,7 +162,7 @@ type AttorneyNameProps = {
 export function AttorneyName({ attorneyId }: AttorneyNameProps) {
   if (attorneyId === null) {
     return (
-      <span className="inline-flex items-center gap-2 text-faint">
+      <span className="inline-flex items-center gap-2 text-muted">
         <span className="grid size-5 shrink-0 place-items-center rounded-full border border-dashed border-border-strong">
           <User className="size-2.75" aria-hidden />
         </span>

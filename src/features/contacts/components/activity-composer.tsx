@@ -113,7 +113,7 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
         placeholder={composerTypes[type].placeholder}
         aria-invalid={showError}
         aria-describedby={showError ? errorId : undefined}
-        className="block min-h-18 w-full resize-y bg-transparent px-3.5 py-2 leading-5 placeholder:text-faint focus-visible:outline-none"
+        className="block min-h-18 w-full resize-y bg-transparent px-3.5 py-2 leading-5 placeholder:text-muted focus-visible:outline-none"
       />
       {showError && (
         <p id={errorId} className="px-3.5 pb-1.5 text-sm text-danger-fg">
@@ -127,7 +127,7 @@ export function ActivityComposer({ status, onSave }: ActivityComposerProps) {
             Retry or discard the entry that didn&apos;t save.
           </p>
         ) : (
-          <p className="flex items-center gap-1 text-xs text-faint">
+          <p className="flex items-center gap-1 text-xs text-muted">
             <Kbd>⌘</Kbd>
             <Kbd>↵</Kbd>
             to save

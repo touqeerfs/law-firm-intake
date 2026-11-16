@@ -24,7 +24,7 @@ export function CopyButton({ value, label }: CopyButtonProps) {
       iconOnly
       aria-label={`Copy ${label.toLowerCase()}`}
       onClick={copy}
-      className="text-faint"
+      className="text-muted"
     >
       <Copy className="size-3.25" aria-hidden />
     </Button>

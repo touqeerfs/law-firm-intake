@@ -78,7 +78,7 @@ export function TimelineItem({ activity, contact, pending, isLast }: TimelineIte
           <time
             dateTime={activity.at}
             title={`${formatShortDate(activity.at)}, ${formatTime(activity.at)}`}
-            className="shrink-0 text-xs text-faint tabular-nums"
+            className="shrink-0 text-xs text-muted tabular-nums"
           >
             {isSaving ? 'Saving…' : formatTime(activity.at)}
           </time>

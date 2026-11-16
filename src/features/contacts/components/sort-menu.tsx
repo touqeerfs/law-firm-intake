@@ -27,7 +27,7 @@ export function SortMenu({ sort, onSortChange }: SortMenuProps) {
           collisionPadding={12}
           className="z-50 min-w-57.5 rounded-md border border-border bg-surface p-1.25 shadow-lg"
         >
-          <DropdownMenu.Label className="px-2.25 pt-2 pb-1.25 text-2xs font-semibold tracking-wider text-faint uppercase">
+          <DropdownMenu.Label className="px-2.25 pt-2 pb-1.25 text-2xs font-semibold tracking-wider text-muted uppercase">
             Sort by
           </DropdownMenu.Label>
           <DropdownMenu.RadioGroup

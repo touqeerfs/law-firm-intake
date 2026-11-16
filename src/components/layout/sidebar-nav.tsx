@@ -12,7 +12,7 @@ export function SidebarNav() {
     <nav aria-label="Primary" className="flex flex-col gap-px">
       <NavLink item="pipeline" variant="sidebar" />
       <NavLink item="contacts" variant="sidebar" count={contacts?.length} />
-      <p className="px-2.5 pt-3.5 pb-1.5 text-2xs font-semibold tracking-wider text-faint uppercase">
+      <p className="px-2.5 pt-3.5 pb-1.5 text-2xs font-semibold tracking-wider text-muted uppercase">
         Needs attention
       </p>
       <NavLink

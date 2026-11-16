@@ -71,7 +71,7 @@ export function SearchBox({ query, onQueryChange }: SearchBoxProps) {
         placeholder="Search name, phone, email or ID"
         autoComplete="off"
         spellCheck={false}
-        className="h-full min-w-0 flex-1 bg-transparent text-text outline-none placeholder:text-faint"
+        className="h-full min-w-0 flex-1 bg-transparent text-text outline-none placeholder:text-muted"
       />
       <kbd className="hidden h-4.5 min-w-4.5 place-items-center rounded-xs border border-b-2 border-border bg-surface-2 px-1 text-2xs font-medium text-muted desktop:inline-grid">
         /

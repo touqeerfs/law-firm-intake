@@ -24,7 +24,7 @@ export function FormFooter({ isDirty, isSaving, submitLabel, onCancel }: FormFoo
           <>
             <Kbd>⌘</Kbd>
             <Kbd>↵</Kbd>
-            <span className="text-faint">to save</span>
+            <span className="text-muted">to save</span>
           </>
         )}
       </p>

@@ -62,7 +62,7 @@ export function ColumnHeader({ status, contacts, state, headingId }: ColumnHeade
         {state === 'ready' && <ColumnSummary status={status} contacts={contacts} />}
         <span
           title="Cards are ordered automatically by urgency"
-          className="ml-auto inline-flex items-center gap-1 text-faint"
+          className="ml-auto inline-flex items-center gap-1 text-muted"
         >
           <ArrowDownUp className="size-3" aria-hidden />
           {columnSortHints[status]}
