@@ -22,13 +22,16 @@ import { CardOverlay } from './card-face';
 import { FocusChip } from './focus-chip';
 import { InsightsStrip } from './insights-strip';
 
+type ContactsQuery = ReturnType<typeof useContacts>;
+
 type BoardProps = {
   focus: BoardFocus | null;
+  contactsQuery: ContactsQuery;
 };
 
-function Board({ focus }: BoardProps) {
+function Board({ focus, contactsQuery }: BoardProps) {
   const router = useRouter();
-  const { data: contacts, error, isPending, isFetching, refetch } = useContacts();
+  const { data: contacts, error, isPending, isFetching, refetch } = contactsQuery;
   const { changeData } = useDemoControls();
   const { requestMove, closing, confirmClose, cancelClose, movingId, lastMovedId } =
     useStatusMove();
@@ -145,15 +148,21 @@ function Board({ focus }: BoardProps) {
   );
 }
 
-function FocusedBoard() {
+type FocusedBoardProps = {
+  contactsQuery: ContactsQuery;
+};
+
+function FocusedBoard({ contactsQuery }: FocusedBoardProps) {
   const focus = boardFocusSchema.nullable().catch(null).parse(useSearchParams().get('focus'));
-  return <Board focus={focus} />;
+  return <Board focus={focus} contactsQuery={contactsQuery} />;
 }
 
 export function PipelineBoard() {
+  // Read above the Suspense boundary, which can hydrate after the sidebar has already filled the cache
+  const contactsQuery = useContacts();
   return (
-    <Suspense fallback={<Board focus={null} />}>
-      <FocusedBoard />
+    <Suspense fallback={<Board focus={null} contactsQuery={contactsQuery} />}>
+      <FocusedBoard contactsQuery={contactsQuery} />
     </Suspense>
   );
 }
